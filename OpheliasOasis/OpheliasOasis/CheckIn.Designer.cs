@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.searchBtn = new System.Windows.Forms.Button();
+            this.backBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.guestDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -95,6 +96,17 @@
             this.searchBtn.Text = "Search";
             this.searchBtn.UseVisualStyleBackColor = true;
             // 
+            // backBtn
+            // 
+            this.backBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.backBtn.Location = new System.Drawing.Point(12, 12);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(81, 26);
+            this.backBtn.TabIndex = 16;
+            this.backBtn.Text = "Back";
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
+            // 
             // CheckIn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -102,6 +114,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.backBtn);
             this.Controls.Add(this.searchBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -125,5 +138,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button searchBtn;
+        private System.Windows.Forms.Button backBtn;
     }
 }
