@@ -76,6 +76,7 @@
     <Compile Include="CheckOut.Designer.cs">
       <DependentUpon>CheckOut.cs</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseManager.cs" />
     <Compile Include="ReservationScreen.cs">
       <SubType>Form</SubType>
     </Compile>
