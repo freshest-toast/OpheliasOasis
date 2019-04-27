@@ -77,6 +77,7 @@
             this.printBillBtn.TabIndex = 11;
             this.printBillBtn.Text = "Print Bill";
             this.printBillBtn.UseVisualStyleBackColor = true;
+            this.printBillBtn.Click += new System.EventHandler(this.printBillBtn_Click);
             // 
             // reservationDataGrid
             // 
@@ -95,6 +96,18 @@
             this.searchGuestBtn.TabIndex = 15;
             this.searchGuestBtn.Text = "Search";
             this.searchGuestBtn.UseVisualStyleBackColor = true;
+            this.searchGuestBtn.Click += new System.EventHandler(this.searchGuestBtn_Click);
+            // 
+            // backBtn
+            // 
+            this.backBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.backBtn.Location = new System.Drawing.Point(12, 12);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(81, 26);
+            this.backBtn.TabIndex = 16;
+            this.backBtn.Text = "Back";
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
             // 
             // backBtn
             // 
