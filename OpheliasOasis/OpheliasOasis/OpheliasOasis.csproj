@@ -77,6 +77,26 @@
       <DependentUpon>CheckOut.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="GenerateDailyArrivalsReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateDailyArrivalsReport.Designer.cs" />
+    <Compile Include="GenerateDailyOccupancyReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateDailyOccupancyReport.Designer.cs" />
+    <Compile Include="GenerateExpectedIncomeReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateExpectedIncomeReport.Designer.cs" />
+    <Compile Include="GenerateExpectedOccupancyReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateExpectedOccupancyReport.Designer.cs" />
+    <Compile Include="GenerateIncentiveReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateIncentiveReport.Designer.cs" />
     <Compile Include="ReservationScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +138,8 @@
     <EmbeddedResource Include="CheckOut.resx">
       <DependentUpon>CheckOut.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx" />
+    <EmbeddedResource Include="GenerateIncentiveReport.resx" />
     <EmbeddedResource Include="LogInScreen.resx">
       <DependentUpon>LogInScreen.cs</DependentUpon>
     </EmbeddedResource>
