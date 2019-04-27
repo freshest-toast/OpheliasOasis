@@ -34,6 +34,7 @@
             this.addRemoveEmployeeBtn = new System.Windows.Forms.Button();
             this.modifyEmployeeBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.backBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // createBackupsBtn
@@ -87,6 +88,17 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "System Administrator Tools";
             // 
+            // backBtn
+            // 
+            this.backBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.backBtn.Location = new System.Drawing.Point(12, 12);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(81, 26);
+            this.backBtn.TabIndex = 16;
+            this.backBtn.Text = "Back";
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
+            // 
             // SystemAdminTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,6 +106,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.backBtn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.modifyEmployeeBtn);
             this.Controls.Add(this.addRemoveEmployeeBtn);
@@ -114,5 +127,6 @@
         private System.Windows.Forms.Button addRemoveEmployeeBtn;
         private System.Windows.Forms.Button modifyEmployeeBtn;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button backBtn;
     }
 }

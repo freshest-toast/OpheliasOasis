@@ -35,6 +35,7 @@
             this.printBillBtn = new System.Windows.Forms.Button();
             this.reservationDataGrid = new System.Windows.Forms.DataGridView();
             this.searchGuestBtn = new System.Windows.Forms.Button();
+            this.backBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.reservationDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,6 +77,7 @@
             this.printBillBtn.TabIndex = 11;
             this.printBillBtn.Text = "Print Bill";
             this.printBillBtn.UseVisualStyleBackColor = true;
+            this.printBillBtn.Click += new System.EventHandler(this.printBillBtn_Click);
             // 
             // reservationDataGrid
             // 
@@ -94,6 +96,18 @@
             this.searchGuestBtn.TabIndex = 15;
             this.searchGuestBtn.Text = "Search";
             this.searchGuestBtn.UseVisualStyleBackColor = true;
+            this.searchGuestBtn.Click += new System.EventHandler(this.searchGuestBtn_Click);
+            // 
+            // backBtn
+            // 
+            this.backBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.backBtn.Location = new System.Drawing.Point(12, 12);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(81, 26);
+            this.backBtn.TabIndex = 16;
+            this.backBtn.Text = "Back";
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
             // 
             // AccomdationBills
             // 
@@ -102,6 +116,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.backBtn);
             this.Controls.Add(this.searchGuestBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -125,5 +140,6 @@
         private System.Windows.Forms.Button printBillBtn;
         private System.Windows.Forms.DataGridView reservationDataGrid;
         private System.Windows.Forms.Button searchGuestBtn;
+        private System.Windows.Forms.Button backBtn;
     }
 }

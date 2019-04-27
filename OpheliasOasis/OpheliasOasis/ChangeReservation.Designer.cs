@@ -39,6 +39,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.changeCheckOut = new System.Windows.Forms.DateTimePicker();
             this.updateReservationBtn = new System.Windows.Forms.Button();
+            this.backBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.reservationDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -135,6 +136,17 @@
             this.updateReservationBtn.Text = "Update Reservation";
             this.updateReservationBtn.UseVisualStyleBackColor = true;
             // 
+            // backBtn
+            // 
+            this.backBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.backBtn.Location = new System.Drawing.Point(12, 12);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(81, 26);
+            this.backBtn.TabIndex = 20;
+            this.backBtn.Text = "Back";
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
+            // 
             // ChangeReservation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -142,6 +154,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(544, 638);
+            this.Controls.Add(this.backBtn);
             this.Controls.Add(this.updateReservationBtn);
             this.Controls.Add(this.changeCheckOut);
             this.Controls.Add(this.label4);
@@ -173,5 +186,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker changeCheckOut;
         private System.Windows.Forms.Button updateReservationBtn;
+        private System.Windows.Forms.Button backBtn;
     }
 }
