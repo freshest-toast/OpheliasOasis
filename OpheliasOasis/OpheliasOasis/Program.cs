@@ -14,8 +14,19 @@ namespace OpheliasOasis
         [STAThread]
         static void Main()
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            try
+            {
+                DatabaseManager.loginUser("djones7777", "password");
+            }
+            catch(Exception e)
+            {
+                return;
+            }
+            
             Application.Run(new LogInScreen());
         }
     }
