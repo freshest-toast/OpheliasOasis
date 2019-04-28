@@ -34,3 +34,21 @@ C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csproj.CoreCompileInputs.cache
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.exe
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.pdb
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\OpheliasOasis.exe.config
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\OpheliasOasis.exe
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\OpheliasOasis.pdb
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csprojAssemblyReference.cache
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.AccomdationBills.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.CancelReservation.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangeReservation.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.CheckIn.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.CheckOut.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.LogInScreen.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.MenuScreen.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.Properties.Resources.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ReservationScreen.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.SystemAdminTools.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csproj.GenerateResource.cache
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csproj.CoreCompileInputs.cache
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.exe
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.pdb
