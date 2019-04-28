@@ -46,7 +46,15 @@ namespace OpheliasOasis
             this.Load += new System.EventHandler(this.GenerateExpectedIncomeReport_Load);
             this.ResumeLayout(false);
 
+            // get data from the database
             LocalReport localReport = reportViewer1.LocalReport;
+//            this.reportViewer1.LocalReport.DataSources.Add();
+//            this.reportViewer1.LocalReport.ReportEmbeddedResource = "";
+
+
+
+
+
 
             // Get data from the database
             ReportDataSource a = new ReportDataSource();
