@@ -15,6 +15,7 @@ namespace OpheliasOasis
     {
         private static string connectionString = "Server=tcp:opheliasoasis.ddns.net\\freshesttoast,8080; Database=OpheliasOasis;";
         private static SqlConnection connection;
+     
         private static string sessionId = "";
 
         /// <summary>
@@ -331,6 +332,48 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
+        public static DataTable getExpectedIncomeReport()
+        {
+            return null;
+        }
 
+        public static DataTable getExpectedOccupancyReport()
+        {
+            return null;
+        }
+
+        public static DataTable getIncentiveReport()
+        {
+            return null;
+        }
+
+        public static DataTable getDailyArrivals()
+        {
+            return null;
+        }
+
+        public static DataTable getDailyOccupancy()
+        {
+            return null;
+        }
+        public struct AccomodationBill
+        {
+            DateTime datePrinted;
+            string guestName;
+            int roomNumber;
+            DateTime arrivalDate;
+            DateTime depatureDate;
+            int numberOfNights;
+            decimal totalCharge;
+            bool isPrepaidOr60Day;
+            DateTime datePaidInAdvance;
+            decimal amountPaid;
+        };
+        public static AccomodationBill getAccomodationBill(int reservationId)
+        {
+            return new AccomodationBill();
+        }
     }
+
+
 }
