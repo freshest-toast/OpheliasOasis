@@ -19,10 +19,21 @@ namespace OpheliasOasis
 
         private void loginBtn_Click(object sender, EventArgs e)
         {
-            string username = usernameTextBox.Text;
-            string password = passwordTextBox.Text;
-            DatabaseManager.loginUser(username,password);
-            
+            try
+            {
+                string username = usernameTextBox.Text;
+                string password = passwordTextBox.Text;
+
+                int access = DatabaseManager.loginUser(username, password);
+
+                MenuScreen mainMenu = new MenuScreen(access);
+                mainMenu.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
     }
 }

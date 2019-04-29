@@ -33,6 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Reporting.WinForms.v11.1.0.0.0\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Reporting.WinForms.v11.1.0.0.0\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Reporting.WinForms.v11.1.0.0.0\lib\Microsoft.ReportViewer.WinForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Reporting.WinForms.v11.1.0.0.0\lib\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -93,10 +105,20 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GenerateExpectedOccupancyReport.Designer.cs" />
+    <Compile Include="GenerateExpectedOccupancyReport1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenerateExpectedOccupancyReport.resx</DependentUpon>
+    </Compile>
     <Compile Include="GenerateIncentiveReport.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GenerateIncentiveReport.Designer.cs" />
+    <Compile Include="GenerateIncentiveReport1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenerateIncentiveReport.resx</DependentUpon>
+    </Compile>
     <Compile Include="ReservationScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,8 +160,14 @@
     <EmbeddedResource Include="CheckOut.resx">
       <DependentUpon>CheckOut.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx" />
-    <EmbeddedResource Include="GenerateIncentiveReport.resx" />
+    <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateExpectedOccupancyReport1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerateIncentiveReport.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateIncentiveReport1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogInScreen.resx">
       <DependentUpon>LogInScreen.cs</DependentUpon>
     </EmbeddedResource>
@@ -161,6 +189,7 @@
     <EmbeddedResource Include="SystemAdminTools.resx">
       <DependentUpon>SystemAdminTools.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
