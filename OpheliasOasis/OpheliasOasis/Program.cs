@@ -20,9 +20,11 @@ namespace OpheliasOasis
 
             try
             {
-                DatabaseManager.loginUser("djones7777", "password");
+                DatabaseManager.loginUser("djones7777", "password1");
+                var tbl = DatabaseManager.getUsers();
+                DatabaseManager.modifyUser((int)tbl.Rows[0].ItemArray[0], "test", 3, "Tester", "Dusty", 10000);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return;
             }
