@@ -66,6 +66,7 @@
             this.addRemoveEmployeeBtn.TabIndex = 2;
             this.addRemoveEmployeeBtn.Text = "Add/Remove Employee";
             this.addRemoveEmployeeBtn.UseVisualStyleBackColor = true;
+            this.addRemoveEmployeeBtn.Click += new System.EventHandler(this.addRemoveEmployeeBtn_Click);
             // 
             // modifyEmployeeBtn
             // 
@@ -76,6 +77,7 @@
             this.modifyEmployeeBtn.TabIndex = 3;
             this.modifyEmployeeBtn.Text = "Modify Employee";
             this.modifyEmployeeBtn.UseVisualStyleBackColor = true;
+            this.modifyEmployeeBtn.Click += new System.EventHandler(this.modifyEmployeeBtn_Click);
             // 
             // label1
             // 
