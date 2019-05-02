@@ -13,7 +13,10 @@ namespace OpheliasOasis
 {
     class DatabaseManager
     {
-        private static string connectionString = "Server=tcp:opheliasoasis.ddns.net\\freshesttoast,8080; Database=OpheliasOasis;";
+
+        private static string connectionString = "Server=192.168.2.2\\freshesttoast,1434; Database=OpheliasOasis;";
+            //"Server=tcp:opheliasoasis.ddns.net\\freshesttoast,8080; Database=OpheliasOasis;";
+
         private static SqlConnection connection;
      
         private static string sessionId = "";
@@ -29,11 +32,11 @@ namespace OpheliasOasis
         public static int loginUser(string username, string password)
         {
             //Check username and password for length
-            if (String.IsNullOrWhiteSpace(username) || username.Length < 6)
-                throw new ArgumentException("The username is too short");
-            if (String.IsNullOrWhiteSpace(password) || password.Length < 6)
-                throw new ArgumentException("The password is too short");
-
+            if (String.IsNullOrWhiteSpace(username) || username.Length < 6 || username.Length > 32)
+                throw new ArgumentException("The username is too short or too long");
+            if (String.IsNullOrWhiteSpace(password) || password.Length < 6 || password.Length > 32)
+                throw new ArgumentException("The password is too short or too long ");
+           
             //Close open connection, create credentials and connection
             connection?.Close();
             sessionId = "";
@@ -43,7 +46,7 @@ namespace OpheliasOasis
             connection = new SqlConnection(connectionString, credential);
 
             //Sql return parameters
-            int errorCode,accessLevel;      
+            int errorCode,accessLevel = 0;      
             string errorMessage;
             try
             {
@@ -57,7 +60,7 @@ namespace OpheliasOasis
                         command.CommandType = System.Data.CommandType.StoredProcedure;
 
                         //Add parameters
-                        command.Parameters.Add(new SqlParameter("@UserName", username));
+                        command.Parameters.Add(new SqlParameter("@UserName", username.ToLower()));
 
                         //Hash the password using SHA2 512 and add as a parameter
                         byte[] strBytes = Encoding.UTF8.GetBytes(password);
@@ -69,16 +72,16 @@ namespace OpheliasOasis
                         }
 
                         //Define the output parameters of the SQL command
-                        SqlParameter sessionParam = new SqlParameter("@SessionId", SqlDbType.VarChar);
-                        sessionParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter sessionParam = new SqlParameter("@SessionId", SqlDbType.VarChar,36);
+                        sessionParam.Direction = ParameterDirection.Output;
                         sessionParam.Value = "";
                         SqlParameter accessLevelParam = new SqlParameter("@AccessLevel", SqlDbType.Int);
-                        accessLevelParam.Direction = ParameterDirection.InputOutput;
-                        SqlParameter errorMessageParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errorMessageParam.Direction = ParameterDirection.InputOutput;
+                        accessLevelParam.Direction = ParameterDirection.Output;
+                        SqlParameter errorMessageParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errorMessageParam.Direction = ParameterDirection.Output;
                         errorMessageParam.Value = "";
                         SqlParameter errorCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errorCodeParam.Direction = ParameterDirection.InputOutput;
+                        errorCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(sessionParam);
                         command.Parameters.Add(accessLevelParam);
                         command.Parameters.Add(errorMessageParam);
@@ -87,11 +90,13 @@ namespace OpheliasOasis
                         //Execute the SQL procedure and get the procedures output
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errorCodeParam.Value);
-                        accessLevel = Convert.ToInt32(accessLevelParam.Value);
                         errorMessage = Convert.ToString(errorMessageParam.Value);
-                        sessionId = Convert.ToString(sessionParam.Value);
-                        if (errorCode == 0)
+                        if(errorCode == 0)
+                        {
+                            accessLevel = Convert.ToInt32(accessLevelParam.Value);
+                            sessionId = Convert.ToString(sessionParam.Value);
                             transaction.Commit();
+                        }
                         else
                             transaction.Rollback();
                     }
@@ -113,6 +118,122 @@ namespace OpheliasOasis
             return accessLevel;
         }
 
+        public static void changePassword(string newPassword)
+        {
+            int errorCode;
+            string errorMessage;
+            try
+            { 
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlCommand command = new SqlCommand("changePassword", connection, transaction))
+                {
+                    try
+                    {
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        //Add parameters
+                        command.Parameters.Add(new SqlParameter("@ExecSessionId", sessionId));
+
+                        //Hash the password using SHA2 512 and add as a parameter
+                        byte[] strBytes = Encoding.UTF8.GetBytes(newPassword);
+                        using (SHA512 sha = new SHA512Managed())
+                        {
+                            SqlParameter passwordParam = new SqlParameter("@NewPassword", sha.ComputeHash(strBytes));
+                            passwordParam.SqlDbType = SqlDbType.Binary;
+                            command.Parameters.Add(passwordParam);
+                        }
+
+                        //Define the output parameters of the SQL command
+                        SqlParameter errorMessageParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errorMessageParam.Direction = ParameterDirection.Output;
+                        errorMessageParam.Value = "";
+                        SqlParameter errorCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                        errorCodeParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(errorMessageParam);
+                        command.Parameters.Add(errorCodeParam);
+
+                        //Execute the SQL procedure and get the procedures output
+                        command.ExecuteNonQuery();
+                        errorCode = Convert.ToInt32(errorCodeParam.Value);
+                        errorMessage = Convert.ToString(errorMessageParam.Value);
+                        if (errorCode == 0)
+                            transaction.Commit();
+                        else
+                            transaction.Rollback();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+            catch
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+
+            //Ensure an error did not occur
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+        }
+        
+        public static DataTable getUsers()
+        {
+            //id, firstname,lastname, username
+            DataTable returnval = new DataTable("Users");
+            returnval.Columns.AddRange(new DataColumn[] 
+            {
+                new DataColumn("id",typeof(int),null,MappingType.Hidden),
+                new DataColumn("First Name",typeof(string)),
+                new DataColumn("Last Name",typeof(string)),
+                new DataColumn("Username",typeof(string))
+            });
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlCommand command = new SqlCommand("findUser", connection, transaction))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("@ExecSessionId",sessionId));
+                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        command.Parameters.Add(errCodeParam);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        command.Parameters.Add(errMsgParam);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                            while(reader.Read())
+                                returnval.Rows.Add(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
+                       
+                        if (errorCode == 0)
+                            transaction.Commit();
+                        else
+                            transaction.Rollback();
+                        
+                    }
+                    catch(Exception xyz)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+            catch(Exception yzz)
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
+        }
+         
         /// <summary>
         /// Adds a user/employee to the system. Checks the parameters. Throws an exception if the parameters are invalid or the logged in user
         /// does not have access rights to add users
@@ -166,19 +287,26 @@ namespace OpheliasOasis
                             {
                             new SqlParameter("@ExecSessionId",sessionId),
                             new SqlParameter("@NewUserName",newUsername),
-                            new SqlParameter("@NewPassword",newPassword),
+                            
                             new SqlParameter("@NewAccessLevel",newAccessLevel),
                             new SqlParameter("@FirstName", firstName),
                             new SqlParameter("@LastName",lastName),
                             new SqlParameter("@SSN",ssnNumber),
                             new SqlParameter("@Salary",salary)
                             });
-
+                        //Hash the password using SHA2 512 and add as a parameter
+                        byte[] strBytes = Encoding.UTF8.GetBytes(newPassword);
+                        using (SHA512 sha = new SHA512Managed())
+                        {
+                            SqlParameter passwordParam = new SqlParameter("@NewPassword", sha.ComputeHash(strBytes));
+                            passwordParam.SqlDbType = SqlDbType.Binary;
+                            command.Parameters.Add(passwordParam);
+                        }
                         //Add the output parameters to the command
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.InputOutput;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
                         errMsgParam.Direction = ParameterDirection.InputOutput;
                         command.Parameters.Add(errMsgParam);
 
@@ -232,10 +360,10 @@ namespace OpheliasOasis
                             new SqlParameter("@UserId",userId)
                             });
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                        errMsgParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
@@ -293,10 +421,11 @@ namespace OpheliasOasis
                                 new SqlParameter("@Salary",salary)
                             });
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
@@ -306,7 +435,7 @@ namespace OpheliasOasis
                         else
                             transaction.Rollback();
                     }
-                    catch
+                    catch(Exception e)
                     {
                         transaction.Rollback();
                         throw;
@@ -328,18 +457,20 @@ namespace OpheliasOasis
         /// <param name="initialDate">The starting date to search from</param>
         /// <param name="endDate">The ending date to search from</param>
         /// <returns>A datatable that contains all related reservations to the specified guest name. 
-        /// The desired reservation should be selected with the reservationId column in the data table (ordinal 0)</returns>
+        /// The desired reservation should be selected with the ReservationId column in the data table (ordinal 0)</returns>
         public static DataTable findReservation(string guestName, DateTime initialDate, DateTime endDate)
         {
+            if (String.IsNullOrWhiteSpace(guestName) || guestName.Length > 64)
+                throw new ArgumentException("The guest name is too short or too long");
             int errorCode;
             string errorMessage;
             DataTable returnval = new DataTable("Reservations");
             returnval.Columns.AddRange(new DataColumn[]
             {
-                new DataColumn("reservationId",typeof(int),null,MappingType.Hidden),
-                new DataColumn("Stay Start Date", typeof(DateTime)),
-                new DataColumn("Stay End Date",typeof(DateTime)),
-                new DataColumn("Guest Name",typeof(DateTime))
+                new DataColumn("ReservationId",typeof(string),null,MappingType.Hidden),
+                new DataColumn("Guest Name",typeof(string)),
+                new DataColumn("Stay Start Date",typeof(string)),
+                new DataColumn("Stay End Date",typeof(string))
             });
             try
             {
@@ -364,7 +495,7 @@ namespace OpheliasOasis
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.InputOutput;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
                         errMsgParam.Direction = ParameterDirection.InputOutput;
                         command.Parameters.Add(errMsgParam);
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -372,7 +503,14 @@ namespace OpheliasOasis
                             errorCode = Convert.ToInt32(errCodeParam.Value);
                             errorMessage = Convert.ToString(errMsgParam.Value);
                             while (reader.Read())
-                                returnval.Rows.Add(reader.GetInt32(0), reader.GetDateTime(1), reader.GetDateTime(2), reader.GetString(3));
+                            {
+                                DateTime date = reader.GetDateTime(1);
+                                string sDate = date.ToString("MM/dd/yyyy");
+                                date = reader.GetDateTime(2);
+                                string eDate = date.ToString("MM/dd/yyyy");
+                                returnval.Rows.Add(reader.GetString(0), reader.GetString(3), sDate, eDate);
+                            }
+                                
                         }
                         if (errorCode == 0)
                             transaction.Commit();
@@ -395,7 +533,7 @@ namespace OpheliasOasis
             return returnval;
         }
 
-        public static void cancelReservation(int reservationId)
+        public static void cancelReservation(string reservationId)
         {
             int errorCode;
             string errorMessage;
@@ -414,10 +552,11 @@ namespace OpheliasOasis
                             new SqlParameter("@ReservationId",reservationId),
                             });
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
@@ -442,8 +581,25 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static void addReservation(int guestId, DateTime startDate, DateTime endDate)
+        public static void addReservation(DateTime startDate, DateTime endDate, string firstName, string lastName, string emailAddress)
         {
+            //Check username and password for length
+            if (String.IsNullOrWhiteSpace(firstName) || firstName.Length > 64)
+                throw new ArgumentException("The first name is too short or too long");
+            if (String.IsNullOrWhiteSpace(lastName) || lastName.Length > 64)
+                throw new ArgumentException("The last name is too short or too long");
+            if (!String.IsNullOrWhiteSpace(emailAddress))
+            {
+                if(emailAddress.Length > 256)
+                    throw new ArgumentException("The email address is too long");
+                if (emailAddress.Count(
+                    (char c) =>
+                    {
+                        return c == '@';
+                    }) != 1)
+                    throw new ArgumentException("The email address does not contain a @");
+            }
+
             int errorCode;
             string errorMessage;
             try
@@ -460,7 +616,9 @@ namespace OpheliasOasis
                             new SqlParameter[]
                             {
                             new SqlParameter("@ExecSessionId",sessionId),
-                            new SqlParameter("@GuestId",guestId),
+                            new SqlParameter("@FirstName", firstName),
+                            new SqlParameter("@LastName",lastName),
+                            new SqlParameter("@Email", emailAddress ?? "")
                             });
                         SqlParameter startDateParameter = new SqlParameter("@StayStartDate", startDate);
                         startDateParameter.DbType = DbType.Date;
@@ -473,7 +631,7 @@ namespace OpheliasOasis
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.InputOutput;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
                         errMsgParam.Direction = ParameterDirection.InputOutput;
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
@@ -499,7 +657,7 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static void changeReservation(int reservationId, DateTime startDate,DateTime endDate)
+        public static void changeReservation(string reservationId, DateTime startDate,DateTime endDate,string firstname, string lastname, string email)
         {
             int errorCode;
             string errorMessage;
@@ -516,6 +674,9 @@ namespace OpheliasOasis
                             {
                             new SqlParameter("@ExecSessionId",sessionId),
                             new SqlParameter("@ReservationId",reservationId),
+                            new SqlParameter("@FirstName",firstname),
+                            new SqlParameter("@LastName",lastname),
+                            new SqlParameter("@Email",email ?? "")
                             });
                         SqlParameter startDateParameter = new SqlParameter("@StayStartDate", startDate);
                         startDateParameter.DbType = DbType.Date;
@@ -525,10 +686,11 @@ namespace OpheliasOasis
                         command.Parameters.Add(endDataParameter);
 
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
@@ -538,7 +700,7 @@ namespace OpheliasOasis
                         else
                             transaction.Rollback();
                     }
-                    catch
+                    catch(Exception e)
                     {
                         transaction.Rollback();
                         throw;
@@ -554,7 +716,7 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static void checkIn(int reservationId)
+        public static void checkIn(string reservationId)
         {
             int errorCode;
             string errorMessage;
@@ -573,10 +735,11 @@ namespace OpheliasOasis
                             new SqlParameter("@ReservationId",reservationId),
                             });
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
@@ -601,7 +764,7 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static void checkOut(int reservationId)
+        public static void checkOut(string reservationId)
         {
             int errorCode;
             string errorMessage;
@@ -621,10 +784,11 @@ namespace OpheliasOasis
                                 new SqlParameter("@ReservationId",reservationId),
                             });
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,32);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
@@ -649,7 +813,7 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static void changeRate(DateTime date, decimal newRate)
+        public static void changeRate(DateTime beginDate,DateTime endDate, decimal newRate)
         {
             int errorCode;
             string errorMessage;
@@ -667,15 +831,18 @@ namespace OpheliasOasis
                                 new SqlParameter("@ExecSessionId",sessionId),
                                 new SqlParameter("@NewRate",newRate),
                             });
-                        SqlParameter rateDateParam = new SqlParameter("@RateDate", DbType.Date);
-                        rateDateParam.Value = date;
-                        command.Parameters.Add(rateDateParam);
-
+                        SqlParameter begDateParam = new SqlParameter("@BegDate", DbType.Date);
+                        begDateParam.Value = beginDate;
+                        command.Parameters.Add(begDateParam);
+                        SqlParameter endDateParam = new SqlParameter("@EndDate", DbType.Date);
+                        endDateParam.Value = endDate;
+                        command.Parameters.Add(endDateParam);
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
                         command.Parameters.Add(errMsgParam);
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
@@ -716,12 +883,12 @@ namespace OpheliasOasis
             return null;
         }
 
-        public static DataTable getDailyArrivals()
+        public static DataTable getDailyArrivalsReport()
         {
             return null;
         }
 
-        public static DataTable getDailyOccupancy()
+        public static DataTable getDailyOccupancyReport()
         {
             return null;
         }
