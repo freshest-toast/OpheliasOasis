@@ -14,8 +14,8 @@ namespace OpheliasOasis
     class DatabaseManager
     {
 
-        private static string connectionString = "Server=192.168.2.2\\freshesttoast,1434; Database=OpheliasOasis;";
-            //"Server=tcp:opheliasoasis.ddns.net\\freshesttoast,8080; Database=OpheliasOasis;";
+        private static string connectionString = //"Server=192.168.2.2\\freshesttoast,1434; Database=OpheliasOasis;";
+            "Server=tcp:opheliasoasis.ddns.net\\freshesttoast,8080; Database=OpheliasOasis;";
 
         private static SqlConnection connection;
      
