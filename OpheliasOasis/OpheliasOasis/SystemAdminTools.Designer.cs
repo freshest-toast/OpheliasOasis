@@ -66,6 +66,7 @@
             this.addRemoveEmployeeBtn.TabIndex = 2;
             this.addRemoveEmployeeBtn.Text = "Add/Remove Employee";
             this.addRemoveEmployeeBtn.UseVisualStyleBackColor = true;
+            this.addRemoveEmployeeBtn.Click += new System.EventHandler(this.addRemoveEmployeeBtn_Click);
             // 
             // modifyEmployeeBtn
             // 
@@ -76,6 +77,7 @@
             this.modifyEmployeeBtn.TabIndex = 3;
             this.modifyEmployeeBtn.Text = "Modify Employee";
             this.modifyEmployeeBtn.UseVisualStyleBackColor = true;
+            this.modifyEmployeeBtn.Click += new System.EventHandler(this.modifyEmployeeBtn_Click);
             // 
             // label1
             // 
@@ -93,8 +95,8 @@
             this.backBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.backBtn.Location = new System.Drawing.Point(12, 12);
             this.backBtn.Name = "backBtn";
-            this.backBtn.Size = new System.Drawing.Size(81, 26);
-            this.backBtn.TabIndex = 16;
+            this.backBtn.Size = new System.Drawing.Size(77, 27);
+            this.backBtn.TabIndex = 15;
             this.backBtn.Text = "Back";
             this.backBtn.UseVisualStyleBackColor = true;
             this.backBtn.Click += new System.EventHandler(this.backBtn_Click);

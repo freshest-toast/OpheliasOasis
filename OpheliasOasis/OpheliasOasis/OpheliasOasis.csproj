@@ -64,6 +64,12 @@
     <Compile Include="AccomdationBills.Designer.cs">
       <DependentUpon>AccomdationBills.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddEmployeeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddEmployeeForm.Designer.cs">
+      <DependentUpon>AddEmployeeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CancelReservation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,10 +111,26 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GenerateExpectedOccupancyReport.Designer.cs" />
+    <Compile Include="GenerateExpectedOccupancyReport1.Designer.cs">
+      <DependentUpon>GenerateExpectedOccupancyReport.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="GenerateIncentiveReport.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GenerateIncentiveReport.Designer.cs" />
+    <Compile Include="GenerateIncentiveReport1.Designer.cs">
+      <DependentUpon>GenerateIncentiveReport.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ModifyUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModifyUserForm.Designer.cs">
+      <DependentUpon>ModifyUserForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ReservationScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,6 +160,9 @@
     <EmbeddedResource Include="AccomdationBills.resx">
       <DependentUpon>AccomdationBills.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AddEmployeeForm.resx">
+      <DependentUpon>AddEmployeeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CancelReservation.resx">
       <DependentUpon>CancelReservation.cs</DependentUpon>
     </EmbeddedResource>
@@ -150,13 +175,22 @@
     <EmbeddedResource Include="CheckOut.resx">
       <DependentUpon>CheckOut.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx" />
-    <EmbeddedResource Include="GenerateIncentiveReport.resx" />
+    <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateExpectedOccupancyReport1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerateIncentiveReport.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateIncentiveReport1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogInScreen.resx">
       <DependentUpon>LogInScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuScreen.resx">
       <DependentUpon>MenuScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModifyUserForm.resx">
+      <DependentUpon>ModifyUserForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
