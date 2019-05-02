@@ -84,6 +84,7 @@
             // 
             this.passwordTextBox.Location = new System.Drawing.Point(229, 203);
             this.passwordTextBox.Name = "passwordTextBox";
+            this.passwordTextBox.PasswordChar = '*';
             this.passwordTextBox.Size = new System.Drawing.Size(211, 20);
             this.passwordTextBox.TabIndex = 4;
             // 
@@ -92,7 +93,7 @@
             this.loginBtn.BackColor = System.Drawing.Color.Transparent;
             this.loginBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("loginBtn.BackgroundImage")));
             this.loginBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loginBtn.Location = new System.Drawing.Point(229, 255);
+            this.loginBtn.Location = new System.Drawing.Point(229, 257);
             this.loginBtn.Name = "loginBtn";
             this.loginBtn.Size = new System.Drawing.Size(114, 29);
             this.loginBtn.TabIndex = 5;

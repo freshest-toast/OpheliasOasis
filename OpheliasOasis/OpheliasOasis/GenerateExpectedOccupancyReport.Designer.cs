@@ -4,7 +4,7 @@ using Microsoft.Reporting.WinForms;
 
 namespace OpheliasOasis
 {
-    partial class GenerateExpectedOccupancyReport
+    partial class GenerateExpectedOccupancyReport: Form
     {
         private System.ComponentModel.IContainer components = null;
         private ReportViewer reportViewer1;

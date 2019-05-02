@@ -12,8 +12,21 @@ namespace OpheliasOasis
 {
     public partial class MenuScreen : Form
     {
-        public MenuScreen()
+        public MenuScreen(int accessLevel)
         {
+            if(accessLevel == 1)
+            {
+                this.groupBox1.Visible = false;
+                this.groupBox2.Visible = false;
+            }
+            else if(accessLevel == 2)
+            {
+                this.groupBox2.Visible = false;
+            }
+           else
+            {
+                MessageBox.Show("Invalid access level, try again");
+            }
             InitializeComponent();
         }
 
@@ -57,6 +70,9 @@ namespace OpheliasOasis
         {
             AccomdationBills accomdationBills = new AccomdationBills();
             accomdationBills.ShowDialog();
+
         }
+
+      
     }
 }

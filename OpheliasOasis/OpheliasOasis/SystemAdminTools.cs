@@ -21,5 +21,16 @@ namespace OpheliasOasis
         {
             this.Close();
         }
+
+        private void addRemoveEmployeeBtn_Click(object sender, EventArgs e)
+        {
+            AddEmployeeForm addEmployeeForm = new AddEmployeeForm();
+            addEmployeeForm.ShowDialog();
+        }
+
+        private void modifyEmployeeBtn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -43,6 +43,8 @@
             this.checkOutBtn = new System.Windows.Forms.Button();
             this.adminBtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.SuspendLayout();
             // 
             // createReservationBtn
@@ -62,7 +64,7 @@
             // cancelReservationBtn
             // 
             this.cancelReservationBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelReservationBtn.Location = new System.Drawing.Point(65, 169);
+            this.cancelReservationBtn.Location = new System.Drawing.Point(320, 86);
             this.cancelReservationBtn.Name = "cancelReservationBtn";
             this.cancelReservationBtn.Size = new System.Drawing.Size(167, 57);
             this.cancelReservationBtn.TabIndex = 1;
@@ -73,7 +75,7 @@
             // changeReservationBtn
             // 
             this.changeReservationBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.changeReservationBtn.Location = new System.Drawing.Point(65, 253);
+            this.changeReservationBtn.Location = new System.Drawing.Point(566, 86);
             this.changeReservationBtn.Name = "changeReservationBtn";
             this.changeReservationBtn.Size = new System.Drawing.Size(167, 57);
             this.changeReservationBtn.TabIndex = 2;
@@ -95,7 +97,7 @@
             // expectedOccupancyBtn
             // 
             this.expectedOccupancyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.expectedOccupancyBtn.Location = new System.Drawing.Point(320, 86);
+            this.expectedOccupancyBtn.Location = new System.Drawing.Point(65, 337);
             this.expectedOccupancyBtn.Name = "expectedOccupancyBtn";
             this.expectedOccupancyBtn.Size = new System.Drawing.Size(167, 57);
             this.expectedOccupancyBtn.TabIndex = 4;
@@ -105,7 +107,7 @@
             // generateExpectedIncomeBtn
             // 
             this.generateExpectedIncomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generateExpectedIncomeBtn.Location = new System.Drawing.Point(320, 169);
+            this.generateExpectedIncomeBtn.Location = new System.Drawing.Point(566, 337);
             this.generateExpectedIncomeBtn.Name = "generateExpectedIncomeBtn";
             this.generateExpectedIncomeBtn.Size = new System.Drawing.Size(167, 57);
             this.generateExpectedIncomeBtn.TabIndex = 5;
@@ -115,7 +117,7 @@
             // generateIncentiveBtn
             // 
             this.generateIncentiveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generateIncentiveBtn.Location = new System.Drawing.Point(320, 253);
+            this.generateIncentiveBtn.Location = new System.Drawing.Point(320, 337);
             this.generateIncentiveBtn.Name = "generateIncentiveBtn";
             this.generateIncentiveBtn.Size = new System.Drawing.Size(167, 57);
             this.generateIncentiveBtn.TabIndex = 6;
@@ -125,7 +127,7 @@
             // generateDailyArrivalsBtn
             // 
             this.generateDailyArrivalsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generateDailyArrivalsBtn.Location = new System.Drawing.Point(566, 86);
+            this.generateDailyArrivalsBtn.Location = new System.Drawing.Point(320, 253);
             this.generateDailyArrivalsBtn.Name = "generateDailyArrivalsBtn";
             this.generateDailyArrivalsBtn.Size = new System.Drawing.Size(167, 57);
             this.generateDailyArrivalsBtn.TabIndex = 7;
@@ -135,7 +137,7 @@
             // generateDailyOccupancyBtn
             // 
             this.generateDailyOccupancyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generateDailyOccupancyBtn.Location = new System.Drawing.Point(566, 169);
+            this.generateDailyOccupancyBtn.Location = new System.Drawing.Point(65, 253);
             this.generateDailyOccupancyBtn.Name = "generateDailyOccupancyBtn";
             this.generateDailyOccupancyBtn.Size = new System.Drawing.Size(167, 57);
             this.generateDailyOccupancyBtn.TabIndex = 8;
@@ -145,7 +147,7 @@
             // generateAccomodationBtn
             // 
             this.generateAccomodationBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generateAccomodationBtn.Location = new System.Drawing.Point(566, 253);
+            this.generateAccomodationBtn.Location = new System.Drawing.Point(566, 169);
             this.generateAccomodationBtn.Name = "generateAccomodationBtn";
             this.generateAccomodationBtn.Size = new System.Drawing.Size(167, 57);
             this.generateAccomodationBtn.TabIndex = 9;
@@ -156,7 +158,7 @@
             // checkInBtn
             // 
             this.checkInBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkInBtn.Location = new System.Drawing.Point(65, 335);
+            this.checkInBtn.Location = new System.Drawing.Point(65, 169);
             this.checkInBtn.Name = "checkInBtn";
             this.checkInBtn.Size = new System.Drawing.Size(167, 57);
             this.checkInBtn.TabIndex = 10;
@@ -167,7 +169,7 @@
             // checkOutBtn
             // 
             this.checkOutBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkOutBtn.Location = new System.Drawing.Point(320, 335);
+            this.checkOutBtn.Location = new System.Drawing.Point(320, 169);
             this.checkOutBtn.Name = "checkOutBtn";
             this.checkOutBtn.Size = new System.Drawing.Size(167, 57);
             this.checkOutBtn.TabIndex = 11;
@@ -179,7 +181,7 @@
             // 
             this.adminBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.adminBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.adminBtn.Location = new System.Drawing.Point(566, 335);
+            this.adminBtn.Location = new System.Drawing.Point(566, 253);
             this.adminBtn.Name = "adminBtn";
             this.adminBtn.Size = new System.Drawing.Size(167, 57);
             this.adminBtn.TabIndex = 12;
@@ -197,6 +199,26 @@
             this.button1.TabIndex = 13;
             this.button1.Text = "Log Out";
             this.button1.UseVisualStyleBackColor = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.groupBox1.Location = new System.Drawing.Point(52, 327);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(690, 84);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBox2.Location = new System.Drawing.Point(551, 232);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(200, 89);
+            this.groupBox2.TabIndex = 15;
+            this.groupBox2.TabStop = false;
             // 
             // MenuScreen
             // 
@@ -219,6 +241,8 @@
             this.Controls.Add(this.changeReservationBtn);
             this.Controls.Add(this.cancelReservationBtn);
             this.Controls.Add(this.createReservationBtn);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBox2);
             this.DoubleBuffered = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -245,5 +269,7 @@
         private System.Windows.Forms.Button checkOutBtn;
         private System.Windows.Forms.Button adminBtn;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
