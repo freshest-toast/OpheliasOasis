@@ -21,11 +21,12 @@ namespace OpheliasOasis
             try
             {
                 DatabaseManager.loginUser("djones7777", "password1");
+            }
             catch (Exception e)
             {
                 return;
             }
-            
+
             Application.Run(new LogInScreen());
         }
     }
