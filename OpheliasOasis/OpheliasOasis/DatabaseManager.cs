@@ -460,7 +460,7 @@ namespace OpheliasOasis
         /// The desired reservation should be selected with the ReservationId column in the data table (ordinal 0)</returns>
         public static DataTable findReservation(string guestName, DateTime initialDate, DateTime endDate)
         {
-            if (String.IsNullOrWhiteSpace(guestName) || guestName.Length > 64)
+            if (!String.IsNullOrWhiteSpace(guestName) && guestName.Length > 64)
                 throw new ArgumentException("The guest name is too short or too long");
             int errorCode;
             string errorMessage;
@@ -484,7 +484,7 @@ namespace OpheliasOasis
                             new SqlParameter[]
                             {
                             new SqlParameter("@ExecSessionId",sessionId),
-                            new SqlParameter("@GuestName",guestName)
+                            new SqlParameter("@GuestName",guestName ?? "")
                             });
                         SqlParameter initDateParam = new SqlParameter("@InitialDate", SqlDbType.Date);
                         initDateParam.Value = initialDate;
@@ -870,12 +870,126 @@ namespace OpheliasOasis
 
         public static DataTable getExpectedIncomeReport()
         {
-            return null;
+            DataTable returnval = new DataTable("Expected Income Report");
+            returnval.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("Date",typeof(string)),
+                new DataColumn("Income For Day", typeof(decimal))
+            });
+            
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlCommand command = new SqlCommand("GetExpectedIncomeReport", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddRange(
+                        new SqlParameter[]
+                        {
+                                new SqlParameter("@ExecSessionId",sessionId)
+                        });
+                    SqlParameter dateParam = new SqlParameter("@CurrentDate", SqlDbType.Date,1);
+                    dateParam.Direction = ParameterDirection.Output;
+                    dateParam.Value = DateTime.Now;
+                    command.Parameters.Add(dateParam);
+                    SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                    errCodeParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(errCodeParam);
+                    SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                    errMsgParam.Direction = ParameterDirection.Output;
+                    errMsgParam.Value = "";
+
+                    List<Tuple<string, decimal>> results = new List<Tuple<string, decimal>>();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                       
+                       
+                        while (reader.Read())
+                            results.Add(new Tuple<string, decimal>(reader.GetDateTime(1).ToString("MM/dd/yyyy"), reader.GetDecimal(0)));
+                       
+                    }
+                    DateTime startDate = Convert.ToDateTime(dateParam.Value);
+                    for (int i = 0; i < 30; i++)
+                    {
+                        returnval.Rows.Add(startDate.ToString("MM/dd/yyyy"), 0.0);
+                        startDate.AddDays(1);
+                    }
+                    errorCode = Convert.ToInt32(errCodeParam.Value);
+                    errorMessage = Convert.ToString(errMsgParam.Value);
+                    foreach (var y in results)
+                        foreach (DataRow x in returnval.Rows)
+                            if ((string)x.ItemArray[0] == y.Item1)
+                            {
+                                x.ItemArray[1] = y.Item2;
+                                break;
+                            }
+                }
+            }
+            catch
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
         }
 
         public static DataTable getExpectedOccupancyReport()
         {
-            return null;
+            DataTable returnval = new DataTable("Expected Occupancy Report");
+            returnval.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("Date",typeof(string)),
+                new DataColumn("Total Rooms Occupied", typeof(int))
+            });
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlCommand command = new SqlCommand("GetExpectedOccupancyReport", connection, transaction))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddRange(
+                            new SqlParameter[]
+                            {
+                                new SqlParameter("@ExecSessionId",sessionId)
+                            });
+                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                        errCodeParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(errCodeParam);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
+                        command.Parameters.Add(errMsgParam);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                            while (reader.Read())
+                                returnval.Rows.Add(reader.GetDateTime(0).ToString("MM/dd/yyyy"),reader.GetInt32(1));
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
+                        if (errorCode == 0)
+                            transaction.Commit();
+                        else
+                            transaction.Rollback();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+
+                }
+            }
+            catch
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
         }
 
         public static DataTable getIncentiveReport()
@@ -885,12 +999,122 @@ namespace OpheliasOasis
 
         public static DataTable getDailyArrivalsReport()
         {
-            return null;
+            DataTable returnval = new DataTable("Daily Arrivals Report");
+            returnval.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("First Name",typeof(string)),
+                new DataColumn("Last Name", typeof(string)),
+                new DataColumn("Reservation Type", typeof(string)),
+                new DataColumn("Room #", typeof(int)),
+                new DataColumn("Depature Date",typeof(string))
+            });
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlCommand command = new SqlCommand("GetDailyArrivalsReport", connection, transaction))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddRange(
+                            new SqlParameter[]
+                            {
+                                new SqlParameter("@ExecSessionId",sessionId)
+                            });
+                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                        errCodeParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(errCodeParam);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
+                        command.Parameters.Add(errMsgParam);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                            while (reader.Read())
+                                returnval.Rows.Add(reader.GetString(0),reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
+                        if (errorCode == 0)
+                            transaction.Commit();
+                        else
+                            transaction.Rollback();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+
+                }
+            }
+            catch
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
         }
 
         public static DataTable getDailyOccupancyReport()
         {
-            return null;
+            DataTable returnval = new DataTable("Daily Occupancy Report");
+            returnval.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("First Name",typeof(string)),
+                new DataColumn("Last Name", typeof(string)),
+                new DataColumn("Reservation Type", typeof(string)),
+                new DataColumn("Room #", typeof(int)),
+                new DataColumn("Depature Date",typeof(string))
+            });
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlCommand command = new SqlCommand("GetDailyOccupancyReport", connection, transaction))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddRange(
+                            new SqlParameter[]
+                            {
+                                new SqlParameter("@ExecSessionId",sessionId)
+                            });
+                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                        errCodeParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(errCodeParam);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
+                        command.Parameters.Add(errMsgParam);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                            while (reader.Read())
+                                returnval.Rows.Add(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
+                        if (errorCode == 0)
+                            transaction.Commit();
+                        else
+                            transaction.Rollback();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+
+                }
+            }
+            catch
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
         }
 
         public struct AccomodationBill
