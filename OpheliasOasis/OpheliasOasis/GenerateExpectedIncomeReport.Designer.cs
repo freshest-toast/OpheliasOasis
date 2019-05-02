@@ -59,7 +59,11 @@ namespace OpheliasOasis
             // Get data from the database
             ReportDataSource a = new ReportDataSource();
             a.Name = "ExpectedIncomeReport";
-            a.Value = ""; // This should be a table.  So the value of the report is the filtered table
+             DatabaseManager x = new DatabaseManager();
+            
+
+
+            a.Value = "" ; // This should be a table.  So the value of the report is the filtered table
             // pass value I get from the function
 
 

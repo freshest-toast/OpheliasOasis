@@ -157,6 +157,9 @@
     <EmbeddedResource Include="CheckOut.resx">
       <DependentUpon>CheckOut.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GenerateExpectedIncomeReport.resx">
+      <DependentUpon>GenerateExpectedIncomeReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx" />
     <EmbeddedResource Include="GenerateIncentiveReport.resx" />
     <EmbeddedResource Include="LogInScreen.resx">
