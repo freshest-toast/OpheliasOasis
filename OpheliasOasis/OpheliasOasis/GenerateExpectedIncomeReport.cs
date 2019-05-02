@@ -22,5 +22,22 @@ namespace OpheliasOasis
             this.reportViewer1.RefreshReport();
         }
 
+        //private void InitializeComponent()
+        //{
+        //    this.SuspendLayout();
+        //    // 
+        //    // GenerateExpectedIncomeReport
+        //    // 
+        //    this.ClientSize = new System.Drawing.Size(284, 261);
+        //    this.Name = "GenerateExpectedIncomeReport";
+        //    this.Shown += new System.EventHandler(this.GenerateExpectedIncomeReport_Shown);
+        //    this.ResumeLayout(false);
+
+        //}
+
+        //private void GenerateExpectedIncomeReport_Shown(object sender, EventArgs e)
+        //{
+
+        //}
     }
 }
