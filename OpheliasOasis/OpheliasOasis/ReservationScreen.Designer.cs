@@ -211,7 +211,7 @@
             this.Controls.Add(this.label1);
             this.DoubleBuffered = true;
             this.Name = "ReservationScreen";
-            this.Text = "Form1";
+            this.Text = "Create Reservation Screen";
             this.ResumeLayout(false);
             this.PerformLayout();
 

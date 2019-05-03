@@ -107,6 +107,12 @@
       <DependentUpon>CheckOut.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="EmailGuestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmailGuestForm.Designer.cs">
+      <DependentUpon>EmailGuestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GenerateDailyArrivalsReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +142,12 @@
       <DependentUpon>GenerateIncentiveReport.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="makePaymentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="makePaymentForm.Designer.cs">
+      <DependentUpon>makePaymentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ModifyUserForm.cs">
       <SubType>Form</SubType>
@@ -193,8 +205,8 @@
     <EmbeddedResource Include="CheckOut.resx">
       <DependentUpon>CheckOut.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GenerateExpectedIncomeReport.resx">
-      <DependentUpon>GenerateExpectedIncomeReport.cs</DependentUpon>
+    <EmbeddedResource Include="EmailGuestForm.resx">
+      <DependentUpon>EmailGuestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -206,6 +218,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LogInScreen.resx">
       <DependentUpon>LogInScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="makePaymentForm.resx">
+      <DependentUpon>makePaymentForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuScreen.resx">
       <DependentUpon>MenuScreen.cs</DependentUpon>
@@ -241,35 +256,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Excel">
-      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>9</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="VBIDE">
-      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

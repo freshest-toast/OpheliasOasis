@@ -32,8 +32,15 @@ namespace OpheliasOasis
                 string lastName = lastNameBox.Text;
                 string emailAddress = emailBox.Text;
                 string creditCard = customerCCBox.Text;
-                string date;
-                DatabaseManager.addReservation(startDate, endDate, firstName, lastName, emailAddress, creditCard,out date);
+                string reservationID;
+
+              decimal payment =  DatabaseManager.addReservation(startDate, endDate, firstName, lastName, emailAddress, creditCard, out reservationID);
+
+                if(payment > 0)
+                {
+                    makePaymentForm paymentForm = new makePaymentForm(reservationID, payment);
+                    paymentForm.ShowDialog();
+                }
                 MessageBox.Show("Reservation Created Successfully");
 
                 firstNameBox.Text = "";
