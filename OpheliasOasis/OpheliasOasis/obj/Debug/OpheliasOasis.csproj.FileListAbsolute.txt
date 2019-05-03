@@ -61,5 +61,12 @@ C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csproj.CopyComplete
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.GenerateExpectedOccupancyReport.resources
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.GenerateIncentiveReport.resources
-C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangeBaseRateForm.resources
-C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangePasswordForm.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.AddEmployeeForm.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.GenerateExpectedOccupancyReport.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.GenerateIncentiveReport.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ModifyUserForm.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\Microsoft.ReportViewer.Common.dll
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\Microsoft.ReportViewer.ProcessingObjectModel.DLL
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\Microsoft.ReportViewer.WinForms.DLL
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\Microsoft.SqlServer.Types.dll
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csproj.CopyComplete
