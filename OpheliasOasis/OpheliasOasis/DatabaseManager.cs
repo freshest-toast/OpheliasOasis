@@ -941,49 +941,72 @@ namespace OpheliasOasis
             returnval.Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("Date",typeof(string)),
+                new DataColumn("Number of Prepaid",typeof(int)),
+                new DataColumn("Number of 60-Day",typeof(int)),
+                new DataColumn("Number of Conventional",typeof(int)),
+                new DataColumn("Number of Incentive Discounts",typeof(int)),
                 new DataColumn("Total Rooms Occupied", typeof(int))
             });
             int errorCode;
             string errorMessage;
+            List<Tuple<string, int, int, int, int,int>> results = new List<Tuple<string, int, int, int, int,int>>();
             try
             {
-                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-                using (SqlCommand command = new SqlCommand("GetExpectedOccupancyReport", connection, transaction))
+                using (SqlCommand command = new SqlCommand("GetExpectedOccupancyReport", connection))
                 {
-                    try
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddRange(
-                            new SqlParameter[]
-                            {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddRange(
+                        new SqlParameter[]
+                        {
                                 new SqlParameter("@ExecSessionId",sessionId)
-                            });
-                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
-                        errMsgParam.Direction = ParameterDirection.Output;
-                        errMsgParam.Value = "";
-                        command.Parameters.Add(errMsgParam);
-                        using (SqlDataReader reader = command.ExecuteReader())
-                            while (reader.Read())
-                                returnval.Rows.Add(reader.GetDateTime(0).ToString("MM/dd/yyyy"),reader.GetInt32(1));
-                        errorCode = Convert.ToInt32(errCodeParam.Value);
-                        errorMessage = Convert.ToString(errMsgParam.Value);
-                        if (errorCode == 0)
-                            transaction.Commit();
-                        else
-                            transaction.Rollback();
-                    }
-                    catch
+                        });
+                    SqlParameter dateParam = new SqlParameter("@CurrentDate", SqlDbType.Date, 1);
+                    dateParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(dateParam);
+                    SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                    errCodeParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(errCodeParam);
+                    SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                    errMsgParam.Direction = ParameterDirection.Output;
+                    errMsgParam.Value = "";
+                    command.Parameters.Add(errMsgParam);
+                    int totalOccupants = 0;
+                    using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
+                        {
+                            string date = reader.GetDateTime(0).ToString("MM/dd/yyyy");
+                            int dayOccupancy = 0;
+                            int var1 = reader.GetInt32(1);
+                            int var2 = reader.GetInt32(1);
+                            int var3 = reader.GetInt32(1);
+                            int var4 = reader.GetInt32(1);
+                            dayOccupancy = var1 + var2 + var3 + var4;
+                            totalOccupants += dayOccupancy;
+                            results.Add(new Tuple<string, int, int, int, int,int>(date, var1, var2, var3, var4,dayOccupancy));
+                        }
+                            
+                    DateTime startDate = Convert.ToDateTime(dateParam.Value);
+                    for (int i = 0; i < 30; i++)
                     {
-                        transaction.Rollback();
-                        throw;
+                        returnval.Rows.Add(startDate.ToString("MM/dd/yyyy"), 0,0,0,0,0);
+                        startDate.AddDays(1);
                     }
-
+                    errorCode = Convert.ToInt32(errCodeParam.Value);
+                    errorMessage = Convert.ToString(errMsgParam.Value);
+                    foreach (var y in results)
+                        foreach (DataRow x in returnval.Rows)
+                            if ((string)x.ItemArray[0] == y.Item1)
+                            {
+                                x.ItemArray[1] = y.Item2;
+                                x.ItemArray[2] = y.Item3;
+                                x.ItemArray[3] = y.Item4;
+                                x.ItemArray[4] = y.Item5;
+                                x.ItemArray[5] = y.Item6;
+                                break;
+                            }
                 }
             }
-            catch
+            catch(Exception x)
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
