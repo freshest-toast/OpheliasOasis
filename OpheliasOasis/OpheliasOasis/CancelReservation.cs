@@ -59,6 +59,7 @@ namespace OpheliasOasis
             {
                 
                 DatabaseManager.cancelReservation(reservationId);
+                MessageBox.Show("Reservation Cancelled Successfully");
 
 
                 string guestName = guestNameBox.Text;

@@ -42,5 +42,11 @@ namespace OpheliasOasis
             usernameTextBox.Text = "";
             passwordTextBox.Text = "";
         }
+
+        private void resetPasswordBtn_Click(object sender, EventArgs e)
+        {
+            ChangePasswordForm changePasswordForm = new ChangePasswordForm();
+            changePasswordForm.ShowDialog();
+        }
     }
 }

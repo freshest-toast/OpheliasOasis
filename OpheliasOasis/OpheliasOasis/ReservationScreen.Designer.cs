@@ -136,6 +136,7 @@
             this.createReservationBtn.TabIndex = 13;
             this.createReservationBtn.Text = "Create Reservation";
             this.createReservationBtn.UseVisualStyleBackColor = true;
+            this.createReservationBtn.Click += new System.EventHandler(this.createReservationBtn_Click);
             // 
             // backBtn
             // 

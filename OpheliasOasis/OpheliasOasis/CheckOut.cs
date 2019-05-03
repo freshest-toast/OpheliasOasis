@@ -58,6 +58,7 @@ namespace OpheliasOasis
             {
 
                 DatabaseManager.checkOut(reservationId);
+                MessageBox.Show("Check Out Successful");
 
 
                 string guestName = guestNameBox.Text;

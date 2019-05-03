@@ -32,6 +32,7 @@ namespace OpheliasOasis
                 int salary = Convert.ToInt32(salaryBox.Text);
 
                 DatabaseManager.addUser(newUsername, newPassword, newAccessLevel, firstName, lastName, ssn, salary);
+                MessageBox.Show("Employee Added Successfully");
             }
             catch(Exception ex)
             {
@@ -62,6 +63,7 @@ namespace OpheliasOasis
             {
                 DatabaseManager.removeUser(userId);
                 reservationDataGrid.DataSource = DatabaseManager.getUsers();
+                MessageBox.Show("Employee Removed Successfully");
             }
             catch(Exception ex)
             {

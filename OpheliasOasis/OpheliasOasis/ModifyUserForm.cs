@@ -44,6 +44,7 @@ namespace OpheliasOasis
 
                 DatabaseManager.modifyUser(userId, newUserName, accessLevel, firstName, lastName, salary);
                 usersDataGrid.DataSource = DatabaseManager.getUsers();
+                MessageBox.Show("User modified successfully");
             }
             catch (Exception ex)
             {
