@@ -32,8 +32,8 @@ namespace OpheliasOasis
                 string lastName = lastNameBox.Text;
                 string emailAddress = emailBox.Text;
                 string creditCard = customerCCBox.Text;
-
-                DatabaseManager.addReservation(startDate, endDate, firstName, lastName, emailAddress, creditCard);
+                string date;
+                DatabaseManager.addReservation(startDate, endDate, firstName, lastName, emailAddress, creditCard,out date);
                 MessageBox.Show("Reservation Created Successfully");
 
                 firstNameBox.Text = "";

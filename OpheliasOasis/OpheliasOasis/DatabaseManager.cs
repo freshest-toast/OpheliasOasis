@@ -1103,61 +1103,68 @@ namespace OpheliasOasis
 
         public static DataTable getIncentiveReport()
         {
-            DataTable returnval = new DataTable("Daily Occupancy Report");
+            DataTable returnval = new DataTable("Incentive Report");
             returnval.Columns.AddRange(new DataColumn[]
             {
-                new DataColumn("First Name",typeof(string)),
-                new DataColumn("Last Name", typeof(string)),
-                new DataColumn("Reservation Type", typeof(string)),
-                new DataColumn("Room #", typeof(int)),
-                new DataColumn("Depature Date",typeof(string))
+                new DataColumn("Date",typeof(string)),
+                new DataColumn("Incentive Discount",typeof(decimal))
             });
             int errorCode;
+            decimal totalIncentiveDiscount = 0;
             string errorMessage;
+            List<Tuple<string, decimal>> results = new List<Tuple<string, decimal>>();
             try
             {
-                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-                using (SqlCommand command = new SqlCommand("GetDailyOccupancyReport", connection, transaction))
+                using (SqlCommand command = new SqlCommand("GetIncentiveReport", connection))
                 {
-                    try
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddRange(
-                            new SqlParameter[]
-                            {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddRange(
+                        new SqlParameter[]
+                        {
                                 new SqlParameter("@ExecSessionId",sessionId)
-                            });
-                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
-                        errMsgParam.Direction = ParameterDirection.Output;
-                        errMsgParam.Value = "";
-                        command.Parameters.Add(errMsgParam);
-                        using (SqlDataReader reader = command.ExecuteReader())
-                            while (reader.Read())
-                                returnval.Rows.Add(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
-                        errorCode = Convert.ToInt32(errCodeParam.Value);
-                        errorMessage = Convert.ToString(errMsgParam.Value);
-                        if (errorCode == 0)
-                            transaction.Commit();
-                        else
-                            transaction.Rollback();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                        });
+                    SqlParameter dateParam = new SqlParameter("@CurrentDate", SqlDbType.Date, 1);
+                    dateParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(dateParam);
+                    SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                    errCodeParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(errCodeParam);
+                    SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                    errMsgParam.Direction = ParameterDirection.Output;
+                    errMsgParam.Value = "";
+                    command.Parameters.Add(errMsgParam);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
+                        {
+                            string date = reader.GetDateTime(0).ToString("MM/dd/yyyy");
+                            decimal incentive = reader.GetDecimal(1);
+                            totalIncentiveDiscount += incentive;
+                            results.Add(new Tuple<string, decimal>(date, incentive));
+                        }
+
+                    DateTime startDate = Convert.ToDateTime(dateParam.Value);
+                    for (int i = 0; i < 30; i++)
+                        returnval.Rows.Add(startDate.AddDays(i).ToString("MM/dd/yyyy"), 0);
+                    errorCode = Convert.ToInt32(errCodeParam.Value);
+                    errorMessage = Convert.ToString(errMsgParam.Value);
+                    foreach (var y in results)
+                        foreach (DataRow x in returnval.Rows)
+                            if ((string)x.ItemArray[0] == y.Item1)
+                            {
+                                x.ItemArray[1] = y.Item2;
+                                break;
+                            }
 
                 }
             }
-            catch
+            catch (Exception x)
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
+            returnval.Rows.Add("Total Incentive Discount", totalIncentiveDiscount);
+            returnval.Rows.Add("Average Incentive Discount", totalIncentiveDiscount / 30);
             return returnval;
         }
 
@@ -1322,7 +1329,7 @@ namespace OpheliasOasis
                     {
                         if(reader.Read())
                         {
-                            //Current date, guest name, room #, arrival date, depature date, # nights, total charge
+                            //Current date, guest name, room #, arrival date, depature date, # nights, total charge, total paid, date paid
                             returnval.datePrinted = reader.GetDateTime(0);
                             returnval.guestName = reader.GetString(1);
                             returnval.roomNumber = reader.GetInt32(2);
@@ -1330,6 +1337,8 @@ namespace OpheliasOasis
                             returnval.depatureDate = reader.GetDateTime(4);
                             returnval.numberOfNights = reader.GetInt32(5);
                             returnval.totalCharge = reader.IsDBNull(6) ? 0: reader.GetDecimal(6);
+                            returnval.amountPaid = reader.IsDBNull(7) ? 0 : reader.GetDecimal(7);
+                            returnval.datePaidInAdvance = reader.IsDBNull(8) ? DateTime.MinValue : reader.GetDateTime(8);
                         }
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
@@ -1397,7 +1406,56 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
             return returnval;
         }
-    }
+        public static bool makePayment(string reservationId)
+        {
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlCommand command = new SqlCommand("MakePayment", connection, transaction))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddRange(
+                            new SqlParameter[]
+                            {
+                                new SqlParameter("@ExecSessionId",sessionId),
+                                new SqlParameter("@ReservationId",reservationId)
+                            });
+                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                        errCodeParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(errCodeParam);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
+                        command.Parameters.Add(errMsgParam);
+                        command.ExecuteNonQuery();
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
+                        if (errorCode == 0)
+                            transaction.Commit();
+                        else
+                            transaction.Rollback();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
 
+                }
+            }
+            catch
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return true;
+        }
+    }
+   
 
 }
