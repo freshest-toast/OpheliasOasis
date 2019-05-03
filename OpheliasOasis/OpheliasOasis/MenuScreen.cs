@@ -14,20 +14,27 @@ namespace OpheliasOasis
     {
         public MenuScreen(int accessLevel)
         {
-            if(accessLevel == 1)
+          
+            InitializeComponent();
+            if (accessLevel == 1)
             {
                 this.groupBox1.Visible = false;
                 this.groupBox2.Visible = false;
             }
-            else if(accessLevel == 2)
+            else if (accessLevel == 2)
             {
                 this.groupBox2.Visible = false;
+                this.groupBox1.Visible = true;
             }
-           else
+            else if (accessLevel == 3)
+            {
+                this.groupBox1.Visible = true;
+                this.groupBox2.Visible = true;
+            }
+            else
             {
                 MessageBox.Show("Invalid access level, try again");
             }
-            InitializeComponent();
         }
 
         private void createReservationBtn_Click(object sender, EventArgs e)
@@ -73,6 +80,16 @@ namespace OpheliasOasis
 
         }
 
-      
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            this.Close();
+        }
+
+        private void changeBaseRateBtn_Click(object sender, EventArgs e)
+        {
+            ChangeBaseRateForm changeBaseRateForm = new ChangeBaseRateForm();
+            changeBaseRateForm.ShowDialog();
+        }
     }
 }

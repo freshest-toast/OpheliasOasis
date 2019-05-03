@@ -76,6 +76,12 @@
     <Compile Include="CancelReservation.Designer.cs">
       <DependentUpon>CancelReservation.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChangeBaseRateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeBaseRateForm.Designer.cs">
+      <DependentUpon>ChangeBaseRateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ChangeReservation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CancelReservation.resx">
       <DependentUpon>CancelReservation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangeBaseRateForm.resx">
+      <DependentUpon>ChangeBaseRateForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChangeReservation.resx">
       <DependentUpon>ChangeReservation.cs</DependentUpon>

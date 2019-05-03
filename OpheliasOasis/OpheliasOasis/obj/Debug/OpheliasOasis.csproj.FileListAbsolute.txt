@@ -61,3 +61,4 @@ C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csproj.CopyComplete
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.GenerateExpectedOccupancyReport.resources
 C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.GenerateIncentiveReport.resources
+C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangeBaseRateForm.resources
