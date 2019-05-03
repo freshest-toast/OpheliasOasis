@@ -15,6 +15,7 @@ namespace OpheliasOasis
         public EmailGuestForm()
         {
             InitializeComponent();
+            emailGrid.DataSource = DatabaseManager.getEmailList();
         }
     }
 }

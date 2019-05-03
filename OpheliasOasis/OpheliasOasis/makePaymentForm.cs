@@ -12,11 +12,23 @@ namespace OpheliasOasis
 {
     public partial class makePaymentForm : Form
     {
-        public makePaymentForm()
+        string reservationID; 
+        public makePaymentForm(string id, decimal cost)
         {
             InitializeComponent();
+            amountDueBox.Text = cost.ToString();
+            amountDueBox.ReadOnly = true;
+            reservationID = id; 
         }
 
-      
+        private void makePaymentForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void makePaymentBtn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

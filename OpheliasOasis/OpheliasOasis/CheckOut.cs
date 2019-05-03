@@ -57,7 +57,14 @@ namespace OpheliasOasis
             try
             {
 
-                DatabaseManager.checkOut(reservationId);
+                decimal payment = DatabaseManager.checkOut(reservationId);
+
+                if(payment > 0)
+                {
+                    makePaymentForm make = new makePaymentForm(reservationId, payment);
+                    make.ShowDialog();
+                }
+
                 MessageBox.Show("Check Out Successful");
 
 

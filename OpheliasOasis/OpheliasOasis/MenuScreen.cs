@@ -94,7 +94,8 @@ namespace OpheliasOasis
 
         private void emailGuestBtn_Click(object sender, EventArgs e)
         {
-
+            EmailGuestForm emailGuestForm = new EmailGuestForm();
+            emailGuestForm.ShowDialog();
         }
     }
 }

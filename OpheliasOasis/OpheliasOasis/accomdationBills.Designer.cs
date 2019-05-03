@@ -36,6 +36,10 @@
             this.reservationDataGrid = new System.Windows.Forms.DataGridView();
             this.searchGuestBtn = new System.Windows.Forms.Button();
             this.backBtn = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.fromDate = new System.Windows.Forms.DateTimePicker();
+            this.toDate = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.reservationDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,7 +75,7 @@
             // printBillBtn
             // 
             this.printBillBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.printBillBtn.Location = new System.Drawing.Point(330, 384);
+            this.printBillBtn.Location = new System.Drawing.Point(330, 449);
             this.printBillBtn.Name = "printBillBtn";
             this.printBillBtn.Size = new System.Drawing.Size(151, 40);
             this.printBillBtn.TabIndex = 11;
@@ -82,7 +86,7 @@
             // reservationDataGrid
             // 
             this.reservationDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.reservationDataGrid.Location = new System.Drawing.Point(176, 200);
+            this.reservationDataGrid.Location = new System.Drawing.Point(176, 293);
             this.reservationDataGrid.Name = "reservationDataGrid";
             this.reservationDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.reservationDataGrid.Size = new System.Drawing.Size(451, 150);
@@ -91,7 +95,7 @@
             // searchGuestBtn
             // 
             this.searchGuestBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchGuestBtn.Location = new System.Drawing.Point(330, 154);
+            this.searchGuestBtn.Location = new System.Drawing.Point(330, 260);
             this.searchGuestBtn.Name = "searchGuestBtn";
             this.searchGuestBtn.Size = new System.Drawing.Size(151, 27);
             this.searchGuestBtn.TabIndex = 15;
@@ -110,13 +114,53 @@
             this.backBtn.UseVisualStyleBackColor = true;
             this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(173, 170);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(93, 17);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "From Date: ";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(173, 223);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(76, 17);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "To Date: ";
+            // 
+            // fromDate
+            // 
+            this.fromDate.Location = new System.Drawing.Point(286, 170);
+            this.fromDate.Name = "fromDate";
+            this.fromDate.Size = new System.Drawing.Size(200, 20);
+            this.fromDate.TabIndex = 19;
+            // 
+            // toDate
+            // 
+            this.toDate.Location = new System.Drawing.Point(286, 220);
+            this.toDate.Name = "toDate";
+            this.toDate.Size = new System.Drawing.Size(200, 20);
+            this.toDate.TabIndex = 20;
+            // 
             // AccomdationBills
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 501);
+            this.Controls.Add(this.toDate);
+            this.Controls.Add(this.fromDate);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.backBtn);
             this.Controls.Add(this.searchGuestBtn);
             this.Controls.Add(this.label2);
@@ -142,5 +186,9 @@
         private System.Windows.Forms.DataGridView reservationDataGrid;
         private System.Windows.Forms.Button searchGuestBtn;
         private System.Windows.Forms.Button backBtn;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DateTimePicker fromDate;
+        private System.Windows.Forms.DateTimePicker toDate;
     }
 }

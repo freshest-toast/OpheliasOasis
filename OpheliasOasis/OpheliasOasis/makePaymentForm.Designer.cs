@@ -73,6 +73,7 @@
             this.makePaymentBtn.TabIndex = 18;
             this.makePaymentBtn.Text = "Confirm Payment";
             this.makePaymentBtn.UseVisualStyleBackColor = true;
+            this.makePaymentBtn.Click += new System.EventHandler(this.makePaymentBtn_Click);
             // 
             // makePaymentForm
             // 
@@ -88,6 +89,7 @@
             this.DoubleBuffered = true;
             this.Name = "makePaymentForm";
             this.Text = "Make Payment Form";
+            this.Load += new System.EventHandler(this.makePaymentForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
