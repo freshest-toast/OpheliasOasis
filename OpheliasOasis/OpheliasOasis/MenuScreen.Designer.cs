@@ -103,6 +103,7 @@
             this.expectedOccupancyBtn.TabIndex = 4;
             this.expectedOccupancyBtn.Text = "Generate Expected Occupancy Report";
             this.expectedOccupancyBtn.UseVisualStyleBackColor = true;
+            this.expectedOccupancyBtn.Click += new System.EventHandler(this.ExpectedOccupancyReportBtn_Click);
             // 
             // generateExpectedIncomeBtn
             // 
@@ -113,6 +114,7 @@
             this.generateExpectedIncomeBtn.TabIndex = 5;
             this.generateExpectedIncomeBtn.Text = "Generate Expected Income Report ";
             this.generateExpectedIncomeBtn.UseVisualStyleBackColor = true;
+            this.generateExpectedIncomeBtn.Click += new System.EventHandler(this.ExpectedRoomIncomeReportBtn_Click);
             // 
             // generateIncentiveBtn
             // 
@@ -123,6 +125,7 @@
             this.generateIncentiveBtn.TabIndex = 6;
             this.generateIncentiveBtn.Text = "Generate Incentive Report ";
             this.generateIncentiveBtn.UseVisualStyleBackColor = true;
+            this.generateIncentiveBtn.Click += new System.EventHandler(this.IncentiveReportBtn_Click);
             // 
             // generateDailyArrivalsBtn
             // 
@@ -133,6 +136,7 @@
             this.generateDailyArrivalsBtn.TabIndex = 7;
             this.generateDailyArrivalsBtn.Text = "Generate Daily Arrivals Report";
             this.generateDailyArrivalsBtn.UseVisualStyleBackColor = true;
+            this.generateDailyArrivalsBtn.Click += new System.EventHandler(this.DailyArrivalsReportBtn_Click);
             // 
             // generateDailyOccupancyBtn
             // 
@@ -143,6 +147,7 @@
             this.generateDailyOccupancyBtn.TabIndex = 8;
             this.generateDailyOccupancyBtn.Text = "Generate Daily Occupancy Report";
             this.generateDailyOccupancyBtn.UseVisualStyleBackColor = true;
+            this.generateDailyOccupancyBtn.Click += new System.EventHandler(this.DailyOccupancyReportBtn_Click);
             // 
             // generateAccomodationBtn
             // 
