@@ -91,5 +91,10 @@ namespace OpheliasOasis
             ChangeBaseRateForm changeBaseRateForm = new ChangeBaseRateForm();
             changeBaseRateForm.ShowDialog();
         }
+
+        private void emailGuestBtn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

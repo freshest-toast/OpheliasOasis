@@ -107,6 +107,12 @@
       <DependentUpon>CheckOut.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="EmailGuestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmailGuestForm.Designer.cs">
+      <DependentUpon>EmailGuestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GenerateDailyArrivalsReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +142,12 @@
       <DependentUpon>GenerateIncentiveReport.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="makePaymentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="makePaymentForm.Designer.cs">
+      <DependentUpon>makePaymentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ModifyUserForm.cs">
       <SubType>Form</SubType>
@@ -193,6 +205,9 @@
     <EmbeddedResource Include="CheckOut.resx">
       <DependentUpon>CheckOut.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EmailGuestForm.resx">
+      <DependentUpon>EmailGuestForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GenerateExpectedOccupancyReport.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GenerateExpectedOccupancyReport1.Designer.cs</LastGenOutput>
@@ -203,6 +218,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LogInScreen.resx">
       <DependentUpon>LogInScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="makePaymentForm.resx">
+      <DependentUpon>makePaymentForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuScreen.resx">
       <DependentUpon>MenuScreen.cs</DependentUpon>
