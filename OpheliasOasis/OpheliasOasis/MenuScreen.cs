@@ -91,5 +91,44 @@ namespace OpheliasOasis
             ChangeBaseRateForm changeBaseRateForm = new ChangeBaseRateForm();
             changeBaseRateForm.ShowDialog();
         }
+        private void ExpectedOccupancyReportBtn_Click(object sender, EventArgs e)
+        {
+            GenerateExpectedOccupancyReport expectedOccupancyReport = new GenerateExpectedOccupancyReport();
+
+            // If the user saved the file and it was successfully saved, output to the user it was successful
+            if (expectedOccupancyReport.Name == "Successful")
+            {
+                expectedOccupancyReport.ShowDialog();
+            }
+        }
+
+        private void ExpectedRoomIncomeReportBtn_Click(object sender, EventArgs e)
+        {
+            GenerateExpectedIncomeReport expectedIncomeReport = new GenerateExpectedIncomeReport();
+
+            // If the user saved the file and it was successfully saved, output to the user it was successful
+            if (expectedIncomeReport.Name == "Successful")
+            {
+                expectedIncomeReport.ShowDialog();
+            }
+        }
+
+        private void IncentiveReportBtn_Click(object sender, EventArgs e)
+        {
+            GenerateIncentiveReport incentiveReport = new GenerateIncentiveReport();
+            incentiveReport.ShowDialog();
+        }
+
+        private void DailyArrivalsReportBtn_Click(object sender, EventArgs e)
+        {
+            GenerateDailyArrivalsReport dailyArrivalsReport = new GenerateDailyArrivalsReport();
+            dailyArrivalsReport.ShowDialog();
+        }
+
+        private void DailyOccupancyReportBtn_Click(object sender, EventArgs e)
+        {
+            GenerateDailyOccupancyReport dailyOccupancyReport = new GenerateDailyOccupancyReport();
+            dailyOccupancyReport.ShowDialog();
+        }
     }
 }
