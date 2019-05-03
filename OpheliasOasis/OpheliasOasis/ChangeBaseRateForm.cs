@@ -26,7 +26,12 @@ namespace OpheliasOasis
         {
             try
             {
+                decimal newRate = Convert.ToDecimal(baseRateBox.Text);
+                DateTime startDate = fromDate.Value;
+                DateTime endDate = toDate.Value;
 
+                DatabaseManager.changeRate(startDate, endDate, newRate);
+                MessageBox.Show("Base Rate changed successfully");
             }
             catch(Exception ex)
             {
