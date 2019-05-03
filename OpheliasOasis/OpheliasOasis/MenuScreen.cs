@@ -14,20 +14,27 @@ namespace OpheliasOasis
     {
         public MenuScreen(int accessLevel)
         {
-            if(accessLevel == 1)
+          
+            InitializeComponent();
+            if (accessLevel == 1)
             {
                 this.groupBox1.Visible = false;
                 this.groupBox2.Visible = false;
             }
-            else if(accessLevel == 2)
+            else if (accessLevel == 2)
             {
                 this.groupBox2.Visible = false;
+                this.groupBox1.Visible = true;
             }
-           else
+            else if (accessLevel == 3)
+            {
+                this.groupBox1.Visible = true;
+                this.groupBox2.Visible = true;
+            }
+            else
             {
                 MessageBox.Show("Invalid access level, try again");
             }
-            InitializeComponent();
         }
 
         private void createReservationBtn_Click(object sender, EventArgs e)
@@ -70,47 +77,19 @@ namespace OpheliasOasis
         {
             AccomdationBills accomdationBills = new AccomdationBills();
             accomdationBills.ShowDialog();
+
         }
 
-        private void ExpectedOccupancyReportBtn_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            GenerateExpectedOccupancyReport expectedOccupancyReport = new GenerateExpectedOccupancyReport();
 
-            // If the user saved the file and it was successfully saved, output to the user it was successful
-            if (expectedOccupancyReport.Name == "Successful")
-            {
-                expectedOccupancyReport.ShowDialog();
-            }
+            this.Close();
         }
 
-        private void ExpectedRoomIncomeReportBtn_Click(object sender, EventArgs e)
+        private void changeBaseRateBtn_Click(object sender, EventArgs e)
         {
-            GenerateExpectedIncomeReport expectedIncomeReport = new GenerateExpectedIncomeReport();
-
-            // If the user saved the file and it was successfully saved, output to the user it was successful
-            if (expectedIncomeReport.Name == "Successful")
-            {
-                expectedIncomeReport.ShowDialog();
-            }
+            ChangeBaseRateForm changeBaseRateForm = new ChangeBaseRateForm();
+            changeBaseRateForm.ShowDialog();
         }
-
-        private void IncentiveReportBtn_Click(object sender, EventArgs e)
-        {
-            GenerateIncentiveReport incentiveReport = new GenerateIncentiveReport();
-            incentiveReport.ShowDialog();
-        }
-
-        private void DailyArrivalsReportBtn_Click(object sender, EventArgs e)
-        {
-            GenerateDailyArrivalsReport dailyArrivalsReport = new GenerateDailyArrivalsReport();
-            dailyArrivalsReport.ShowDialog();
-        }
-
-        private void DailyOccupancyReportBtn_Click(object sender, EventArgs e)
-        {
-            GenerateDailyOccupancyReport dailyOccupancyReport = new GenerateDailyOccupancyReport();
-            dailyOccupancyReport.ShowDialog();
-        }
-
     }
 }

@@ -35,6 +35,7 @@
             this.passwordLabel = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.loginBtn = new System.Windows.Forms.Button();
+            this.resetPasswordBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // usernameLabel
@@ -93,13 +94,26 @@
             this.loginBtn.BackColor = System.Drawing.Color.Transparent;
             this.loginBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("loginBtn.BackgroundImage")));
             this.loginBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loginBtn.Location = new System.Drawing.Point(229, 257);
+            this.loginBtn.Location = new System.Drawing.Point(115, 255);
             this.loginBtn.Name = "loginBtn";
             this.loginBtn.Size = new System.Drawing.Size(114, 29);
             this.loginBtn.TabIndex = 5;
             this.loginBtn.Text = "Log In";
             this.loginBtn.UseVisualStyleBackColor = false;
             this.loginBtn.Click += new System.EventHandler(this.loginBtn_Click);
+            // 
+            // resetPasswordBtn
+            // 
+            this.resetPasswordBtn.BackColor = System.Drawing.Color.Transparent;
+            this.resetPasswordBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("resetPasswordBtn.BackgroundImage")));
+            this.resetPasswordBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resetPasswordBtn.Location = new System.Drawing.Point(245, 255);
+            this.resetPasswordBtn.Name = "resetPasswordBtn";
+            this.resetPasswordBtn.Size = new System.Drawing.Size(195, 29);
+            this.resetPasswordBtn.TabIndex = 6;
+            this.resetPasswordBtn.Text = "Reset Password";
+            this.resetPasswordBtn.UseVisualStyleBackColor = false;
+            this.resetPasswordBtn.Click += new System.EventHandler(this.resetPasswordBtn_Click);
             // 
             // LogInScreen
             // 
@@ -109,6 +123,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(612, 385);
+            this.Controls.Add(this.resetPasswordBtn);
             this.Controls.Add(this.loginBtn);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.passwordLabel);
@@ -134,6 +149,7 @@
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Button loginBtn;
+        private System.Windows.Forms.Button resetPasswordBtn;
     }
 }
 

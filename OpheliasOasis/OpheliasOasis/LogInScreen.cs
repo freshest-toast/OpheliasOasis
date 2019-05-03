@@ -27,6 +27,7 @@ namespace OpheliasOasis
                 int access = DatabaseManager.loginUser(username, password);
 
                 MenuScreen mainMenu = new MenuScreen(access);
+                mainMenu.FormClosed += MainMenu_FormClosed;
                 mainMenu.ShowDialog();
             }
             catch (Exception ex)
@@ -34,6 +35,18 @@ namespace OpheliasOasis
                 MessageBox.Show(ex.Message);
             }
 
+        }
+
+        private void MainMenu_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            usernameTextBox.Text = "";
+            passwordTextBox.Text = "";
+        }
+
+        private void resetPasswordBtn_Click(object sender, EventArgs e)
+        {
+            ChangePasswordForm changePasswordForm = new ChangePasswordForm();
+            changePasswordForm.ShowDialog();
         }
     }
 }

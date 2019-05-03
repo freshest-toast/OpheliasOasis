@@ -47,8 +47,6 @@
             this.accessBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.reservationDataGrid = new System.Windows.Forms.DataGridView();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.removeEmployeeBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.reservationDataGrid)).BeginInit();
             this.SuspendLayout();
@@ -215,28 +213,11 @@
             // reservationDataGrid
             // 
             this.reservationDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.reservationDataGrid.Location = new System.Drawing.Point(443, 171);
+            this.reservationDataGrid.Location = new System.Drawing.Point(443, 89);
             this.reservationDataGrid.Name = "reservationDataGrid";
-            this.reservationDataGrid.Size = new System.Drawing.Size(366, 150);
+            this.reservationDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.reservationDataGrid.Size = new System.Drawing.Size(366, 310);
             this.reservationDataGrid.TabIndex = 18;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.Transparent;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(439, 89);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(105, 20);
-            this.label10.TabIndex = 19;
-            this.label10.Text = "Last Name: ";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(550, 91);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(259, 20);
-            this.textBox1.TabIndex = 20;
             // 
             // removeEmployeeBtn
             // 
@@ -247,6 +228,7 @@
             this.removeEmployeeBtn.TabIndex = 21;
             this.removeEmployeeBtn.Text = "Remove Employee";
             this.removeEmployeeBtn.UseVisualStyleBackColor = true;
+            this.removeEmployeeBtn.Click += new System.EventHandler(this.removeEmployeeBtn_Click);
             // 
             // AddEmployeeForm
             // 
@@ -256,8 +238,6 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(832, 476);
             this.Controls.Add(this.removeEmployeeBtn);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label10);
             this.Controls.Add(this.reservationDataGrid);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.accessBox);
@@ -305,8 +285,6 @@
         private System.Windows.Forms.TextBox accessBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DataGridView reservationDataGrid;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button removeEmployeeBtn;
     }
 }

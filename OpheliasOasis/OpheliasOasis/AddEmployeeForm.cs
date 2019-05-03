@@ -14,7 +14,9 @@ namespace OpheliasOasis
     {
         public AddEmployeeForm()
         {
+            
             InitializeComponent();
+            reservationDataGrid.DataSource = DatabaseManager.getUsers();
         }
 
         private void addEmployeeBtn_Click(object sender, EventArgs e)
@@ -30,6 +32,7 @@ namespace OpheliasOasis
                 int salary = Convert.ToInt32(salaryBox.Text);
 
                 DatabaseManager.addUser(newUsername, newPassword, newAccessLevel, firstName, lastName, ssn, salary);
+                MessageBox.Show("Employee Added Successfully");
             }
             catch(Exception ex)
             {
@@ -40,6 +43,33 @@ namespace OpheliasOasis
 
         }
 
-      
+        private void removeEmployeeBtn_Click(object sender, EventArgs e)
+        {
+            if(reservationDataGrid.SelectedRows.Count <= 0)
+            {
+                return;
+                
+            }
+
+            int row =(int) reservationDataGrid.SelectedRows[0].Index;
+            DataTable tbl = (DataTable)reservationDataGrid.DataSource;
+            if(row < 0 || row >= tbl.Rows.Count)
+            {
+                return; 
+            }
+
+            int userId = (int)tbl.Rows[row].ItemArray[0];
+            try
+            {
+                DatabaseManager.removeUser(userId);
+                reservationDataGrid.DataSource = DatabaseManager.getUsers();
+                MessageBox.Show("Employee Removed Successfully");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+           
+        }
     }
 }

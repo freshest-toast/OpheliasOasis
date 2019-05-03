@@ -45,6 +45,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.changeBaseRateBtn = new System.Windows.Forms.Button();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // createReservationBtn
@@ -97,7 +100,7 @@
             // expectedOccupancyBtn
             // 
             this.expectedOccupancyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.expectedOccupancyBtn.Location = new System.Drawing.Point(65, 337);
+            this.expectedOccupancyBtn.Location = new System.Drawing.Point(13, 10);
             this.expectedOccupancyBtn.Name = "expectedOccupancyBtn";
             this.expectedOccupancyBtn.Size = new System.Drawing.Size(167, 57);
             this.expectedOccupancyBtn.TabIndex = 4;
@@ -108,7 +111,7 @@
             // generateExpectedIncomeBtn
             // 
             this.generateExpectedIncomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generateExpectedIncomeBtn.Location = new System.Drawing.Point(566, 337);
+            this.generateExpectedIncomeBtn.Location = new System.Drawing.Point(514, 10);
             this.generateExpectedIncomeBtn.Name = "generateExpectedIncomeBtn";
             this.generateExpectedIncomeBtn.Size = new System.Drawing.Size(167, 57);
             this.generateExpectedIncomeBtn.TabIndex = 5;
@@ -119,7 +122,7 @@
             // generateIncentiveBtn
             // 
             this.generateIncentiveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generateIncentiveBtn.Location = new System.Drawing.Point(320, 337);
+            this.generateIncentiveBtn.Location = new System.Drawing.Point(268, 10);
             this.generateIncentiveBtn.Name = "generateIncentiveBtn";
             this.generateIncentiveBtn.Size = new System.Drawing.Size(167, 57);
             this.generateIncentiveBtn.TabIndex = 6;
@@ -186,7 +189,7 @@
             // 
             this.adminBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.adminBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.adminBtn.Location = new System.Drawing.Point(566, 253);
+            this.adminBtn.Location = new System.Drawing.Point(15, 21);
             this.adminBtn.Name = "adminBtn";
             this.adminBtn.Size = new System.Drawing.Size(167, 57);
             this.adminBtn.TabIndex = 12;
@@ -198,26 +201,32 @@
             // 
             this.button1.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(320, 417);
+            this.button1.Location = new System.Drawing.Point(320, 510);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(167, 30);
             this.button1.TabIndex = 13;
             this.button1.Text = "Log Out";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.groupBox1.Controls.Add(this.changeBaseRateBtn);
+            this.groupBox1.Controls.Add(this.expectedOccupancyBtn);
+            this.groupBox1.Controls.Add(this.generateIncentiveBtn);
+            this.groupBox1.Controls.Add(this.generateExpectedIncomeBtn);
             this.groupBox1.Location = new System.Drawing.Point(52, 327);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(690, 84);
+            this.groupBox1.Size = new System.Drawing.Size(699, 177);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             // 
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox2.Controls.Add(this.adminBtn);
             this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox2.Location = new System.Drawing.Point(551, 232);
             this.groupBox2.Name = "groupBox2";
@@ -225,23 +234,30 @@
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             // 
+            // changeBaseRateBtn
+            // 
+            this.changeBaseRateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.changeBaseRateBtn.Location = new System.Drawing.Point(13, 97);
+            this.changeBaseRateBtn.Name = "changeBaseRateBtn";
+            this.changeBaseRateBtn.Size = new System.Drawing.Size(167, 57);
+            this.changeBaseRateBtn.TabIndex = 7;
+            this.changeBaseRateBtn.Text = "Change Base Rate";
+            this.changeBaseRateBtn.UseVisualStyleBackColor = true;
+            this.changeBaseRateBtn.Click += new System.EventHandler(this.changeBaseRateBtn_Click);
+            // 
             // MenuScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 463);
+            this.ClientSize = new System.Drawing.Size(800, 552);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.adminBtn);
             this.Controls.Add(this.checkOutBtn);
             this.Controls.Add(this.checkInBtn);
             this.Controls.Add(this.generateAccomodationBtn);
             this.Controls.Add(this.generateDailyOccupancyBtn);
             this.Controls.Add(this.generateDailyArrivalsBtn);
-            this.Controls.Add(this.generateIncentiveBtn);
-            this.Controls.Add(this.generateExpectedIncomeBtn);
-            this.Controls.Add(this.expectedOccupancyBtn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.changeReservationBtn);
             this.Controls.Add(this.cancelReservationBtn);
@@ -253,6 +269,8 @@
             this.MinimizeBox = false;
             this.Name = "MenuScreen";
             this.Text = "Menu Screen";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,5 +294,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button changeBaseRateBtn;
     }
 }

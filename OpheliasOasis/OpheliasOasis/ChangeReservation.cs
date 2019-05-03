@@ -21,5 +21,28 @@ namespace OpheliasOasis
         {
             this.Close();
         }
+
+        private void searchGuestBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string guestName = guestNameBox.Text;
+                DateTime initialDateVal = filterStartDateBtn.Value;
+                DateTime endDateVal = filterEndDateBtn.Value;
+                reservationDataGrid.DataSource = DatabaseManager.findReservation(guestName, initialDateVal, endDateVal);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+            }
+        }
+
+        private void updateReservationBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+       
     }
 }
