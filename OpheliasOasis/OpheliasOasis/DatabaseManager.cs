@@ -577,6 +577,7 @@ namespace OpheliasOasis
             return returnval;
         }
 
+
         public static void cancelReservation(string reservationId)
         {
             int errorCode;
@@ -625,8 +626,9 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static decimal addReservation(DateTime startDate, DateTime endDate, string firstName, string lastName, string emailAddress,string creditCard)
+        public static decimal addReservation(DateTime startDate, DateTime endDate, string firstName, string lastName, string emailAddress,string creditCard, out string reservationId)
         {
+            reservationId = "";
             decimal cost;
             //Check username and password for length
             if (String.IsNullOrWhiteSpace(firstName) || firstName.Length > 64)
@@ -683,6 +685,10 @@ namespace OpheliasOasis
                         costParam.Scale = 2;
                         costParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(costParam);
+                        SqlParameter reserveIdParam = new SqlParameter("@ReservationId", SqlDbType.VarChar, 36);
+                        reserveIdParam.Direction = ParameterDirection.Output;
+                        reserveIdParam.Value = "";
+                        command.Parameters.Add(reserveIdParam);
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
@@ -694,6 +700,7 @@ namespace OpheliasOasis
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
                         cost = Convert.ToDecimal(costParam.Value);
+                        reservationId = Convert.ToString(reserveIdParam.Value);
                         if (errorCode == 0)
                             transaction.Commit();
                         else
@@ -715,9 +722,10 @@ namespace OpheliasOasis
             return cost;
         }
 
-        public static void changeReservation(string reservationId, DateTime startDate,DateTime endDate,string firstname, string lastname, string email)
+        public static decimal changeReservation(string reservationId, DateTime startDate,DateTime endDate,string firstname, string lastname, string email)
         {
             int errorCode;
+            decimal cost;
             string errorMessage;
             try
             {
@@ -743,6 +751,11 @@ namespace OpheliasOasis
                         command.Parameters.Add(startDateParameter);
                         command.Parameters.Add(endDataParameter);
 
+                        SqlParameter costParameter = new SqlParameter("@Cost",SqlDbType.Decimal,18);
+                        costParameter.Precision = 18;
+                        costParameter.Scale = 2;
+                        costParameter.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(costParameter);
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
@@ -753,6 +766,7 @@ namespace OpheliasOasis
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
+                        cost = Convert.ToDecimal(costParameter.Value);
                         if (errorCode == 0)
                             transaction.Commit();
                         else
@@ -763,7 +777,6 @@ namespace OpheliasOasis
                         transaction.Rollback();
                         throw;
                     }
-                    
                 }
             }
             catch
@@ -772,6 +785,7 @@ namespace OpheliasOasis
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
+            return cost;
         }
 
         public static void checkIn(string reservationId)
@@ -822,8 +836,10 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static void checkOut(string reservationId)
+        public static decimal checkOut(string reservationId)
         {
+            reservationId = "";
+            decimal cost;
             int errorCode;
             string errorMessage;
             try
@@ -841,6 +857,11 @@ namespace OpheliasOasis
                                 new SqlParameter("@ExecSessionId",sessionId),
                                 new SqlParameter("@ReservationId",reservationId),
                             });
+                        SqlParameter costParam = new SqlParameter("@Cost", SqlDbType.Decimal,18);
+                        costParam.Precision = 18;
+                        costParam.Scale = 2;
+                        costParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(costParam);
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
@@ -851,6 +872,7 @@ namespace OpheliasOasis
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
+                        cost = Convert.ToDecimal(costParam.Value);
                         if (errorCode == 0)
                             transaction.Commit();
                         else
@@ -869,6 +891,7 @@ namespace OpheliasOasis
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
+            return 0;
         }
 
         public static void changeRate(DateTime beginDate,DateTime endDate, decimal newRate)
@@ -1259,21 +1282,67 @@ namespace OpheliasOasis
         
         public struct AccomodationBill
         {
-            DateTime datePrinted;
-            string guestName;
-            int roomNumber;
-            DateTime arrivalDate;
-            DateTime depatureDate;
-            int numberOfNights;
-            decimal totalCharge;
-            bool isPrepaidOr60Day;
-            DateTime datePaidInAdvance;
-            decimal amountPaid;
+            public DateTime datePrinted;
+            public string guestName;
+            public int roomNumber;
+            public DateTime arrivalDate;
+            public DateTime depatureDate;
+            public int numberOfNights;
+            public decimal totalCharge;
+            public bool isPrepaidOr60Day;
+            public DateTime datePaidInAdvance;
+            public decimal amountPaid;
         };
 
-        public static AccomodationBill getAccomodationBill(int reservationId)
+        public static AccomodationBill getAccomodationBill(string reservationId)
         {
-            return new AccomodationBill();
+           
+            AccomodationBill returnval = new AccomodationBill();
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlCommand command = new SqlCommand("getAccomodationBill", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddRange(
+                        new SqlParameter[]
+                        {
+                            new SqlParameter("@ExecSessionId",sessionId),
+                            new SqlParameter("@ReservationID",reservationId)
+                        });
+                    SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                    errCodeParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(errCodeParam);
+                    SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                    errMsgParam.Direction = ParameterDirection.Output;
+                    errMsgParam.Value = "";
+                    command.Parameters.Add(errMsgParam);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if(reader.Read())
+                        {
+                            //Current date, guest name, room #, arrival date, depature date, # nights, total charge
+                            returnval.datePrinted = reader.GetDateTime(0);
+                            returnval.guestName = reader.GetString(1);
+                            returnval.roomNumber = reader.GetInt32(2);
+                            returnval.arrivalDate = reader.GetDateTime(3);
+                            returnval.depatureDate = reader.GetDateTime(4);
+                            returnval.numberOfNights = reader.GetInt32(5);
+                            returnval.totalCharge = reader.IsDBNull(6) ? 0: reader.GetDecimal(6);
+                        }
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
+                    }
+                }
+            }
+            catch (Exception x)
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
         }
 
         public static DataTable getEmailList()
