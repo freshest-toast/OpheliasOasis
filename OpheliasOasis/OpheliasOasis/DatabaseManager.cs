@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*  
+ *  Author: David Jones
+ *  Date: April 8, 2019
+ *  The purpose of this object is to control communication between the GUI and the SQL Server Database
+ *  This object communicates with the server by using stored procedures. The object also ensures that 
+ *  parameters passed to the SQL Server (from user input) are valid and of the required length. The object should
+ *  never be created instead functions are static
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -8,17 +17,21 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace OpheliasOasis
 {
+    /*
+     *  Object with static functions used to connect and communicate with the server
+     */
     class DatabaseManager
     {
-
+        
         private static string connectionString = //"Server=192.168.2.2\\freshesttoast,1434; Database=OpheliasOasis;";
-            "Server=tcp:opheliasoasis.ddns.net\\freshesttoast,8080; Database=OpheliasOasis;";
+        "Server=tcp:opheliasoasis.ddns.net\\freshesttoast,8080; Database=OpheliasOasis;";
 
-        private static SqlConnection connection;
+        //The connection to the sql server. Remains valid until a new user logs in or until the application closes
+        private static SqlConnection connection;            
      
+        //The session id of the current logged in user
         private static string sessionId = "";
 
         /// <summary>
@@ -118,12 +131,20 @@ namespace OpheliasOasis
             return accessLevel;
         }
 
+        /// <summary>
+        /// Changes the password of the current logged in user.
+        /// </summary>
+        /// <param name="newPassword">Should be at least 6 characters</param>
         public static void changePassword(string newPassword)
         {
+            //Check the password parameter
+            if (String.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+                throw new ArgumentException("The specified password is too short or too long");
             int errorCode;
             string errorMessage;
             try
             { 
+                //Create a transaction and build the command
                 using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
                 using (SqlCommand command = new SqlCommand("changePassword", connection, transaction))
                 {
@@ -173,14 +194,18 @@ namespace OpheliasOasis
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
 
-            //Ensure an error did not occur
+            //Ensure an error did not occur in the stored function
             if (errorCode != 0)
                 throw new Exception(errorMessage);
         }
         
+        /// <summary>
+        /// Gets the employees / users of the system
+        /// </summary>
+        /// <returns> A datatable that contains the id, first name, last name and username of each user in the system</returns>
         public static DataTable getUsers()
         {
-            //id, firstname,lastname, username
+            //Create the datatable to return
             DataTable returnval = new DataTable("Users");
             returnval.Columns.AddRange(new DataColumn[] 
             {
@@ -193,39 +218,30 @@ namespace OpheliasOasis
             string errorMessage;
             try
             {
-                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-                using (SqlCommand command = new SqlCommand("findUser", connection, transaction))
+                //Build the sql command to execute the stored procedure and execute the command
+                using (SqlCommand command = new SqlCommand("findUser", connection))
                 {
-                    try
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter("@ExecSessionId",sessionId));
-                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
-                        command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
-                        command.Parameters.Add(errMsgParam);
-                        using (SqlDataReader reader = command.ExecuteReader())
-                            while(reader.Read())
-                                returnval.Rows.Add(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
-                        errorCode = Convert.ToInt32(errCodeParam.Value);
-                        errorMessage = Convert.ToString(errMsgParam.Value);
-                       
-                        if (errorCode == 0)
-                            transaction.Commit();
-                        else
-                            transaction.Rollback();
-                        
-                    }
-                    catch(Exception xyz)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    //Specify the command input parameters
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@ExecSessionId", sessionId));
+
+                    //Specify the command output parameters
+                    SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                    errCodeParam.Direction = ParameterDirection.InputOutput;
+                    command.Parameters.Add(errCodeParam);
+                    SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                    errMsgParam.Direction = ParameterDirection.InputOutput;
+                    command.Parameters.Add(errMsgParam);
+
+                    //Execute the command and read the returned table. Insert the data into the data table to return (by ordinal)
+                    using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
+                            returnval.Rows.Add(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                    errorCode = Convert.ToInt32(errCodeParam.Value);
+                    errorMessage = Convert.ToString(errMsgParam.Value);
                 }
             }
-            catch(Exception yzz)
+            catch
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
@@ -248,21 +264,21 @@ namespace OpheliasOasis
         public static void addUser(string newUsername, string newPassword, int newAccessLevel, string firstName, string lastName, string ssn, int salary)
         {
             //Check the input parameters
-            if (String.IsNullOrWhiteSpace(newUsername) || newUsername.Length < 6)
-                throw new ArgumentException("The user name must be at least 6 characters");
+            if (String.IsNullOrWhiteSpace(newUsername) || newUsername.Length < 6 || newUsername.Length > 64)
+                throw new ArgumentException("The user name must be at least 6 characters and no more than 64 characters");
             if(String.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
                 throw new ArgumentException("The password must be at least 6 characters");
             if (newAccessLevel < 0 || newAccessLevel > 3)
-                throw new ArgumentException("The user's access level must be between 1 and 3");
-            if (String.IsNullOrWhiteSpace(firstName))
-                throw new ArgumentException("The user must have a first name");
-            if (String.IsNullOrWhiteSpace(lastName))
-                throw new ArgumentException("The user must have a last name");
+                throw new ArgumentException("The user's access level must be between 0 and 3");
+            if (String.IsNullOrWhiteSpace(firstName) || firstName.Length > 64)
+                throw new ArgumentException("The user must have a first name of no more than 64 characters");
+            if (String.IsNullOrWhiteSpace(lastName) || firstName.Length > 64)
+                throw new ArgumentException("The user must have a last name of no more than 64 characters");
             if (String.IsNullOrWhiteSpace(ssn))
                 throw new ArgumentException("The user's social security number must be specified");
             int ssnNumber;
             if (!Int32.TryParse(ssn,out ssnNumber))
-                throw new ArgumentException("The user's social security number must be digits");
+                throw new ArgumentException("The user's social security number must be 9 digits");
             if (ssnNumber > 999999999 || ssnNumber < 100000000)
                 throw new ArgumentException("The user's social security number must be 9 digits");
             if (salary < 1)
@@ -273,7 +289,7 @@ namespace OpheliasOasis
             try
             {
 
-                //Execute the sql command to add the new user / employee in a serializable transaction
+                //Execute the sql command in a transaction to add the new user / employee in a serializable transaction
                 using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
                 using (SqlCommand command = new SqlCommand("addUser", connection, transaction))
                 {
@@ -347,24 +363,31 @@ namespace OpheliasOasis
             string errorMessage;
             try
             {
+                //Build the SQL command within a transaction
                 using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
                 using (SqlCommand command = new SqlCommand("removeUser", connection, transaction))
                 {
                     try
                     {
                         command.CommandType = CommandType.StoredProcedure;
+                        
+                        //Add the input parameters
                         command.Parameters.AddRange(
                             new SqlParameter[]
                             {
-                            new SqlParameter("@ExecSessionId",sessionId),
-                            new SqlParameter("@UserId",userId)
+                                new SqlParameter("@ExecSessionId",sessionId),
+                                new SqlParameter("@UserId",userId)
                             });
+
+                        //Add the output parameters
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
                         SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
                         errMsgParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errMsgParam);
+                        
+                        //Execute the stored procedure
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
@@ -384,6 +407,8 @@ namespace OpheliasOasis
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
+
+            //Throw error if the stored procedure fails
             if (errorCode != 0)
                 throw new Exception(errorMessage);
         }
@@ -399,15 +424,29 @@ namespace OpheliasOasis
         /// <param name="salary">The salary of the user. Should be greater than 0</param>
         public static void modifyUser(int userId,string newUsername, int accessLevel, string firstName, string lastName, int salary)
         {
+            //Check the parameters
+            if (String.IsNullOrWhiteSpace(newUsername) || newUsername.Length < 6 || newUsername.Length > 64)
+                throw new ArgumentException("The user name must be at least 6 characters and no more than 64 characters");
+            if (accessLevel < 0 || accessLevel > 3)
+                throw new ArgumentException("The user's access level must be between 0 and 3");
+            if (String.IsNullOrWhiteSpace(firstName) || firstName.Length > 64)
+                throw new ArgumentException("The user must have a first name of no more than 64 characters");
+            if (String.IsNullOrWhiteSpace(lastName) || firstName.Length > 64)
+                throw new ArgumentException("The user must have a last name of no more than 64 characters");
+            if (salary < 1)
+                throw new ArgumentException("The user's salary must be greater than 0");
+
             int errorCode;
             string errorMessage;
             try
             {
+                //Create the sql command to execute the stored procedure in a transaction
                 using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
                 using (SqlCommand command = new SqlCommand("modifyUser", connection,transaction))
                 {
                     try
                     {
+                        //Add the input parameters
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddRange(
                             new SqlParameter[]
@@ -420,6 +459,8 @@ namespace OpheliasOasis
                                 new SqlParameter("@LastName",lastName),
                                 new SqlParameter("@Salary",salary)
                             });
+
+                        //Add the output parameters
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
                         errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
@@ -427,6 +468,8 @@ namespace OpheliasOasis
                         errMsgParam.Direction = ParameterDirection.Output;
                         errMsgParam.Value = "";
                         command.Parameters.Add(errMsgParam);
+
+                        //Execute the command
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
@@ -446,6 +489,7 @@ namespace OpheliasOasis
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
+            //Check to make sure the stored procedure executed properly
             if (errorCode != 0)
                 throw new Exception(errorMessage);
         }
@@ -460,10 +504,13 @@ namespace OpheliasOasis
         /// The desired reservation should be selected with the ReservationId column in the data table (ordinal 0)</returns>
         public static DataTable findReservation(string guestName, DateTime initialDate, DateTime endDate)
         {
+            //Check the input parameters
             if (!String.IsNullOrWhiteSpace(guestName) && guestName.Length > 64)
                 throw new ArgumentException("The guest name is too short or too long");
             int errorCode;
             string errorMessage;
+
+            //Create the data table to return from the function
             DataTable returnval = new DataTable("Reservations");
             returnval.Columns.AddRange(new DataColumn[]
             {
@@ -472,55 +519,50 @@ namespace OpheliasOasis
                 new DataColumn("Stay Start Date",typeof(string)),
                 new DataColumn("Stay End Date",typeof(string))
             });
+
             try
             {
-                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-                using (SqlCommand command = new SqlCommand("findReservation", connection,transaction))
+                //Create and execute the command that calls the stored procedure in a transaction
+                using (SqlCommand command = new SqlCommand("findReservation", connection))
                 {
-                    try
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddRange(
-                            new SqlParameter[]
-                            {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    //Add input parameters
+                    command.Parameters.AddRange(
+                        new SqlParameter[]
+                        {
                             new SqlParameter("@ExecSessionId",sessionId),
                             new SqlParameter("@GuestName",guestName ?? "")
-                            });
-                        SqlParameter initDateParam = new SqlParameter("@InitialDate", SqlDbType.Date);
-                        initDateParam.Value = initialDate;
-                        command.Parameters.Add(initDateParam);
-                        SqlParameter endDateParam = new SqlParameter("@EndDate", SqlDbType.Date);
-                        endDateParam.Value = endDate;
-                        command.Parameters.Add(endDateParam);
-                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
-                        command.Parameters.Add(errCodeParam);
-                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar,256);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
-                        command.Parameters.Add(errMsgParam);
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            errorCode = Convert.ToInt32(errCodeParam.Value);
-                            errorMessage = Convert.ToString(errMsgParam.Value);
-                            while (reader.Read())
-                            {
-                                DateTime date = reader.GetDateTime(1);
-                                string sDate = date.ToString("MM/dd/yyyy");
-                                date = reader.GetDateTime(2);
-                                string eDate = date.ToString("MM/dd/yyyy");
-                                returnval.Rows.Add(reader.GetString(0), reader.GetString(3), sDate, eDate);
-                            }
-                                
-                        }
-                        if (errorCode == 0)
-                            transaction.Commit();
-                        else
-                            transaction.Rollback();
-                    }
-                    catch
+                        });
+                    SqlParameter initDateParam = new SqlParameter("@InitialDate", SqlDbType.Date);
+                    initDateParam.Value = initialDate;
+                    command.Parameters.Add(initDateParam);
+                    SqlParameter endDateParam = new SqlParameter("@EndDate", SqlDbType.Date);
+                    endDateParam.Value = endDate;
+                    command.Parameters.Add(endDateParam);
+
+                    //Add the output parameters
+                    SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                    errCodeParam.Direction = ParameterDirection.InputOutput;
+                    command.Parameters.Add(errCodeParam);
+                    SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                    errMsgParam.Direction = ParameterDirection.InputOutput;
+                    command.Parameters.Add(errMsgParam);
+
+                    //Execute the command and get the reader
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        transaction.Rollback();
-                        throw;
+                        //Read the table and add the info to the table to return
+                        while (reader.Read())
+                        {
+                            DateTime date = reader.GetDateTime(1);
+                            string sDate = date.ToString("MM/dd/yyyy");
+                            date = reader.GetDateTime(2);
+                            string eDate = date.ToString("MM/dd/yyyy");
+                            returnval.Rows.Add(reader.GetString(0), reader.GetString(3), sDate, eDate);
+                        }
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
                     }
                 }
             }
@@ -528,6 +570,8 @@ namespace OpheliasOasis
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
+
+            //Make sure the stored procedure executed without an error
             if (errorCode != 0)
                 throw new Exception(errorMessage);
             return returnval;
@@ -581,8 +625,9 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
         }
 
-        public static void addReservation(DateTime startDate, DateTime endDate, string firstName, string lastName, string emailAddress)
+        public static decimal addReservation(DateTime startDate, DateTime endDate, string firstName, string lastName, string emailAddress,string creditCard)
         {
+            decimal cost;
             //Check username and password for length
             if (String.IsNullOrWhiteSpace(firstName) || firstName.Length > 64)
                 throw new ArgumentException("The first name is too short or too long");
@@ -599,7 +644,11 @@ namespace OpheliasOasis
                     }) != 1)
                     throw new ArgumentException("The email address does not contain a @");
             }
-
+            if (String.IsNullOrWhiteSpace(creditCard) || creditCard.Length != 16)
+                throw new ArgumentException("The credit card is invalid");
+            for (int i = 0; i < 16; i++)
+                if (!Char.IsDigit(creditCard[i]))
+                    throw new Exception("The credit card is invalid");
             int errorCode;
             string errorMessage;
             try
@@ -618,7 +667,8 @@ namespace OpheliasOasis
                             new SqlParameter("@ExecSessionId",sessionId),
                             new SqlParameter("@FirstName", firstName),
                             new SqlParameter("@LastName",lastName),
-                            new SqlParameter("@Email", emailAddress ?? "")
+                            new SqlParameter("@Email", emailAddress ?? ""),
+                            new SqlParameter("@CCNum",creditCard)
                             });
                         SqlParameter startDateParameter = new SqlParameter("@StayStartDate", startDate);
                         startDateParameter.DbType = DbType.Date;
@@ -628,21 +678,28 @@ namespace OpheliasOasis
                         command.Parameters.Add(endDataParameter);
 
                         //Add the output parameters
+                        SqlParameter costParam = new SqlParameter("@Cost", SqlDbType.Decimal,18);
+                        costParam.Precision = 18;
+                        costParam.Scale = 2;
+                        costParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(costParam);
                         SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
-                        errCodeParam.Direction = ParameterDirection.InputOutput;
+                        errCodeParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errCodeParam);
                         SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
-                        errMsgParam.Direction = ParameterDirection.InputOutput;
+                        errMsgParam.Direction = ParameterDirection.Output;
                         command.Parameters.Add(errMsgParam);
+                        errMsgParam.Value = "";
                         command.ExecuteNonQuery();
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
+                        cost = Convert.ToDecimal(costParam.Value);
                         if (errorCode == 0)
                             transaction.Commit();
                         else
                             transaction.Rollback();
                     }
-                    catch
+                    catch(Exception x)
                     {
                         transaction.Rollback();
                         throw;
@@ -655,6 +712,7 @@ namespace OpheliasOasis
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
+            return cost;
         }
 
         public static void changeReservation(string reservationId, DateTime startDate,DateTime endDate,string firstname, string lastname, string email)
@@ -829,8 +887,13 @@ namespace OpheliasOasis
                             new SqlParameter[]
                             {
                                 new SqlParameter("@ExecSessionId",sessionId),
-                                new SqlParameter("@NewRate",newRate),
+                                
                             });
+                        SqlParameter rateParam = new SqlParameter("@NewRate", 18);
+                        rateParam.Scale = 2;
+                        rateParam.Precision = 18;
+                        rateParam.Value = newRate;
+                        command.Parameters.Add(rateParam);
                         SqlParameter begDateParam = new SqlParameter("@BegDate", DbType.Date);
                         begDateParam.Value = beginDate;
                         command.Parameters.Add(begDateParam);
@@ -878,6 +941,7 @@ namespace OpheliasOasis
             });
             
             int errorCode;
+            decimal totalIncome = 0;
             string errorMessage;
             try
             {
@@ -903,18 +967,17 @@ namespace OpheliasOasis
                     List<Tuple<string, decimal>> results = new List<Tuple<string, decimal>>();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                       
-                       
                         while (reader.Read())
-                            results.Add(new Tuple<string, decimal>(reader.GetDateTime(1).ToString("MM/dd/yyyy"), reader.GetDecimal(0)));
-                       
+                        {
+                            string date = reader.GetDateTime(1).ToString("MM/dd/yyyy");
+                            decimal incomeForNight = reader.GetDecimal(0);
+                            totalIncome += incomeForNight;
+                            results.Add(new Tuple<string, decimal>(date, incomeForNight));
+                        }
                     }
                     DateTime startDate = Convert.ToDateTime(dateParam.Value);
                     for (int i = 0; i < 30; i++)
-                    {
-                        returnval.Rows.Add(startDate.ToString("MM/dd/yyyy"), 0.0);
-                        startDate.AddDays(1);
-                    }
+                        returnval.Rows.Add(startDate.AddDays(i).ToString("MM/dd/yyyy"), 0.0);
                     errorCode = Convert.ToInt32(errCodeParam.Value);
                     errorMessage = Convert.ToString(errMsgParam.Value);
                     foreach (var y in results)
@@ -932,6 +995,8 @@ namespace OpheliasOasis
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
+            returnval.Rows.Add("Total Income", totalIncome);
+            returnval.Rows.Add("Average Income", totalIncome / 30);
             return returnval;
         }
 
@@ -947,7 +1012,7 @@ namespace OpheliasOasis
                 new DataColumn("Number of Incentive Discounts",typeof(int)),
                 new DataColumn("Total Rooms Occupied", typeof(int))
             });
-            int errorCode;
+            int errorCode, totalOccupants = 0; ;
             string errorMessage;
             List<Tuple<string, int, int, int, int,int>> results = new List<Tuple<string, int, int, int, int,int>>();
             try
@@ -970,7 +1035,6 @@ namespace OpheliasOasis
                     errMsgParam.Direction = ParameterDirection.Output;
                     errMsgParam.Value = "";
                     command.Parameters.Add(errMsgParam);
-                    int totalOccupants = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                         while (reader.Read())
                         {
@@ -987,10 +1051,7 @@ namespace OpheliasOasis
                             
                     DateTime startDate = Convert.ToDateTime(dateParam.Value);
                     for (int i = 0; i < 30; i++)
-                    {
-                        returnval.Rows.Add(startDate.ToString("MM/dd/yyyy"), 0,0,0,0,0);
-                        startDate.AddDays(1);
-                    }
+                        returnval.Rows.Add(startDate.AddDays(i).ToString("MM/dd/yyyy"), 0,0,0,0,0);
                     errorCode = Convert.ToInt32(errCodeParam.Value);
                     errorMessage = Convert.ToString(errMsgParam.Value);
                     foreach (var y in results)
@@ -1004,6 +1065,7 @@ namespace OpheliasOasis
                                 x.ItemArray[5] = y.Item6;
                                 break;
                             }
+                    
                 }
             }
             catch(Exception x)
@@ -1012,12 +1074,68 @@ namespace OpheliasOasis
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
+            returnval.Rows.Add("Average Expected Occupancy Rate", (decimal)totalOccupants / (45 * 30), 0, 0, 0, 0, 0);
             return returnval;
         }
 
         public static DataTable getIncentiveReport()
         {
-            return null;
+            DataTable returnval = new DataTable("Daily Occupancy Report");
+            returnval.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("First Name",typeof(string)),
+                new DataColumn("Last Name", typeof(string)),
+                new DataColumn("Reservation Type", typeof(string)),
+                new DataColumn("Room #", typeof(int)),
+                new DataColumn("Depature Date",typeof(string))
+            });
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+                using (SqlCommand command = new SqlCommand("GetDailyOccupancyReport", connection, transaction))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddRange(
+                            new SqlParameter[]
+                            {
+                                new SqlParameter("@ExecSessionId",sessionId)
+                            });
+                        SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                        errCodeParam.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(errCodeParam);
+                        SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                        errMsgParam.Direction = ParameterDirection.Output;
+                        errMsgParam.Value = "";
+                        command.Parameters.Add(errMsgParam);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                            while (reader.Read())
+                                returnval.Rows.Add(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
+                        errorCode = Convert.ToInt32(errCodeParam.Value);
+                        errorMessage = Convert.ToString(errMsgParam.Value);
+                        if (errorCode == 0)
+                            transaction.Commit();
+                        else
+                            transaction.Rollback();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+
+                }
+            }
+            catch
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
         }
 
         public static DataTable getDailyArrivalsReport()
@@ -1025,8 +1143,7 @@ namespace OpheliasOasis
             DataTable returnval = new DataTable("Daily Arrivals Report");
             returnval.Columns.AddRange(new DataColumn[]
             {
-                new DataColumn("First Name",typeof(string)),
-                new DataColumn("Last Name", typeof(string)),
+                new DataColumn("Name",typeof(string)),
                 new DataColumn("Reservation Type", typeof(string)),
                 new DataColumn("Room #", typeof(int)),
                 new DataColumn("Depature Date",typeof(string))
@@ -1055,7 +1172,7 @@ namespace OpheliasOasis
                         command.Parameters.Add(errMsgParam);
                         using (SqlDataReader reader = command.ExecuteReader())
                             while (reader.Read())
-                                returnval.Rows.Add(reader.GetString(0),reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
+                                returnval.Rows.Add(reader.GetString(0),reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
                         if (errorCode == 0)
@@ -1139,7 +1256,7 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
             return returnval;
         }
-
+        
         public struct AccomodationBill
         {
             DateTime datePrinted;
@@ -1157,6 +1274,59 @@ namespace OpheliasOasis
         public static AccomodationBill getAccomodationBill(int reservationId)
         {
             return new AccomodationBill();
+        }
+
+        public static DataTable getEmailList()
+        {
+            DataTable returnval = new DataTable("Customer Email List");
+            returnval.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("Name",typeof(string)),
+                new DataColumn("Email", typeof(string)),
+                new DataColumn("Reservation Start Date", typeof(string)),
+                new DataColumn("Reservation End Date", typeof(string)),
+                new DataColumn("Charge",typeof(decimal))
+            });
+            int errorCode;
+            string errorMessage;
+            try
+            {
+                using (SqlCommand command = new SqlCommand("EmailGuest", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddRange(
+                        new SqlParameter[]
+                        {
+                            new SqlParameter("@ExecSessionId",sessionId)
+                        });
+                    SqlParameter errCodeParam = new SqlParameter("@ErrCode", SqlDbType.Int);
+                    errCodeParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(errCodeParam);
+                    SqlParameter errMsgParam = new SqlParameter("@ErrMsg", SqlDbType.VarChar, 256);
+                    errMsgParam.Direction = ParameterDirection.Output;
+                    errMsgParam.Value = "";
+                    command.Parameters.Add(errMsgParam);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
+                        {
+                            string name = reader.GetString(0);
+                            string email = reader.GetString(1);
+                            string reservationStartDate = reader.GetDateTime(2).ToString("MM/dd/yyyy");
+                            string reservationEndDate = reader.GetDateTime(3).ToString("MM/dd/yyyy");
+                            decimal amount = reader.GetDecimal(4);
+                            returnval.Rows.Add(name, email, reservationStartDate, reservationEndDate, amount);
+                        }
+                    errorCode = Convert.ToInt32(errCodeParam.Value);
+                    errorMessage = Convert.ToString(errMsgParam.Value);
+                }
+            }
+            catch(Exception x)
+            {
+                throw new Exception("A connection issued occurred. Please contact an administrator");
+            }
+            if (errorCode != 0)
+                throw new Exception(errorMessage);
+            return returnval;
         }
     }
 
