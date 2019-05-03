@@ -84,6 +84,7 @@
             this.reservationDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.reservationDataGrid.Location = new System.Drawing.Point(176, 200);
             this.reservationDataGrid.Name = "reservationDataGrid";
+            this.reservationDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.reservationDataGrid.Size = new System.Drawing.Size(451, 150);
             this.reservationDataGrid.TabIndex = 10;
             // 
@@ -97,17 +98,6 @@
             this.searchGuestBtn.Text = "Search";
             this.searchGuestBtn.UseVisualStyleBackColor = true;
             this.searchGuestBtn.Click += new System.EventHandler(this.searchGuestBtn_Click);
-            // 
-            // backBtn
-            // 
-            this.backBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.backBtn.Location = new System.Drawing.Point(12, 12);
-            this.backBtn.Name = "backBtn";
-            this.backBtn.Size = new System.Drawing.Size(81, 26);
-            this.backBtn.TabIndex = 16;
-            this.backBtn.Text = "Back";
-            this.backBtn.UseVisualStyleBackColor = true;
-            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
             // 
             // backBtn
             // 

@@ -88,6 +88,7 @@
             this.reservationDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.reservationDataGrid.Location = new System.Drawing.Point(168, 299);
             this.reservationDataGrid.Name = "reservationDataGrid";
+            this.reservationDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.reservationDataGrid.Size = new System.Drawing.Size(451, 150);
             this.reservationDataGrid.TabIndex = 5;
             // 

@@ -70,3 +70,5 @@ C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\Microsoft.ReportViewer.WinForms.DLL
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\Microsoft.SqlServer.Types.dll
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csproj.CopyComplete
+C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangeBaseRateForm.resources
+C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangePasswordForm.resources

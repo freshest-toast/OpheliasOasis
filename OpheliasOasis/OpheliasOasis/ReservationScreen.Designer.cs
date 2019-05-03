@@ -42,6 +42,8 @@
             this.backBtn = new System.Windows.Forms.Button();
             this.lastNameBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.customerCCBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -96,7 +98,7 @@
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(9, 221);
+            this.label6.Location = new System.Drawing.Point(9, 274);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(115, 17);
             this.label6.TabIndex = 9;
@@ -104,7 +106,7 @@
             // 
             // checkInDate
             // 
-            this.checkInDate.Location = new System.Drawing.Point(150, 217);
+            this.checkInDate.Location = new System.Drawing.Point(150, 270);
             this.checkInDate.Name = "checkInDate";
             this.checkInDate.Size = new System.Drawing.Size(200, 20);
             this.checkInDate.TabIndex = 10;
@@ -114,7 +116,7 @@
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.Transparent;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(9, 270);
+            this.label7.Location = new System.Drawing.Point(9, 323);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(128, 17);
             this.label7.TabIndex = 11;
@@ -122,7 +124,7 @@
             // 
             // checkOutDate
             // 
-            this.checkOutDate.Location = new System.Drawing.Point(150, 266);
+            this.checkOutDate.Location = new System.Drawing.Point(150, 320);
             this.checkOutDate.Name = "checkOutDate";
             this.checkOutDate.Size = new System.Drawing.Size(200, 20);
             this.checkOutDate.TabIndex = 12;
@@ -130,7 +132,7 @@
             // createReservationBtn
             // 
             this.createReservationBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.createReservationBtn.Location = new System.Drawing.Point(199, 343);
+            this.createReservationBtn.Location = new System.Drawing.Point(209, 401);
             this.createReservationBtn.Name = "createReservationBtn";
             this.createReservationBtn.Size = new System.Drawing.Size(186, 44);
             this.createReservationBtn.TabIndex = 13;
@@ -167,13 +169,33 @@
             this.label2.TabIndex = 16;
             this.label2.Text = "Last Name: ";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(12, 226);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(106, 17);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "Customer CC:";
+            // 
+            // customerCCBox
+            // 
+            this.customerCCBox.Location = new System.Drawing.Point(150, 223);
+            this.customerCCBox.Name = "customerCCBox";
+            this.customerCCBox.Size = new System.Drawing.Size(183, 20);
+            this.customerCCBox.TabIndex = 18;
+            // 
             // ReservationScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(582, 421);
+            this.ClientSize = new System.Drawing.Size(582, 464);
+            this.Controls.Add(this.customerCCBox);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lastNameBox);
             this.Controls.Add(this.backBtn);
@@ -210,5 +232,7 @@
         private System.Windows.Forms.Button backBtn;
         private System.Windows.Forms.TextBox lastNameBox;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox customerCCBox;
     }
 }

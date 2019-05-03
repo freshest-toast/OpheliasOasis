@@ -61,6 +61,7 @@
             this.usersDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.usersDataGrid.Location = new System.Drawing.Point(30, 78);
             this.usersDataGrid.Name = "usersDataGrid";
+            this.usersDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.usersDataGrid.Size = new System.Drawing.Size(435, 150);
             this.usersDataGrid.TabIndex = 16;
             // 

@@ -24,7 +24,29 @@ namespace OpheliasOasis
 
         private void createReservationBtn_Click(object sender, EventArgs e)
         {
+            try
+            {
+                DateTime startDate = checkInDate.Value;
+                DateTime endDate = checkOutDate.Value;
+                string firstName = firstNameBox.Text;
+                string lastName = lastNameBox.Text;
+                string emailAddress = emailBox.Text;
+                string creditCard = customerCCBox.Text;
 
+                DatabaseManager.addReservation(startDate, endDate, firstName, lastName, emailAddress, creditCard);
+                MessageBox.Show("Reservation Created Successfully");
+
+                firstNameBox.Text = "";
+                lastNameBox.Text = "";
+                checkInDate.Text = "";
+                checkOutDate.Text = "";
+                emailBox.Text = "";
+                customerCCBox.Text = "";
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }
