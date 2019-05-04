@@ -77,3 +77,4 @@ C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangePasswordForm.resources
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.EmailGuestForm.resources
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.makePaymentForm.resources
+C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csprojAssemblyReference.cache
