@@ -1209,7 +1209,7 @@ namespace OpheliasOasis
                         else
                             transaction.Rollback();
                     }
-                    catch
+                    catch(Exception x)
                     {
                         transaction.Rollback();
                         throw;
