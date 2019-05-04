@@ -28,7 +28,17 @@ namespace OpheliasOasis
 
         private void makePaymentBtn_Click(object sender, EventArgs e)
         {
+            decimal amount = Convert.ToDecimal(amountDueBox.Text);
 
+            try
+            {
+                DatabaseManager.makePayment(reservationID);
+                MessageBox.Show("Payment Made Successfully");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }
