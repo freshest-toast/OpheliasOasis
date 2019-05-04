@@ -37,7 +37,6 @@ C:\Users\maggie.chen\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\OpheliasOasis.exe.config
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\OpheliasOasis.exe
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\bin\Debug\OpheliasOasis.pdb
-C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.csprojAssemblyReference.cache
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.AccomdationBills.resources
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.CancelReservation.resources
 C:\Users\David Jones\Documents\GitHub\OpheliasOasis\OpheliasOasis\OpheliasOasis\obj\Debug\OpheliasOasis.ChangeReservation.resources
