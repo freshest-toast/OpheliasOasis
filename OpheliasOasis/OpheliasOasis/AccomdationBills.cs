@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Mime;
+using System.IO;
 
 namespace OpheliasOasis
 {
@@ -15,6 +17,8 @@ namespace OpheliasOasis
         public AccomdationBills()
         {
             InitializeComponent();
+
+           
         }
 
         private void searchGuestBtn_Click(object sender, EventArgs e)
@@ -64,13 +68,40 @@ namespace OpheliasOasis
                         new DataColumn("Number of Nights", typeof(int)),
                         new DataColumn("Total Charge", typeof(decimal)),
                         new DataColumn("Is this 60 Days in Advance?", typeof(bool)),
-                        new DataColumn("Date Paid in Advance", typeof(DateTime)),
+                        new DataColumn("Date Paid in Advance", typeof(string)),
                         new DataColumn("Amount Paid", typeof(decimal))
 
                 });
 
-                table.Rows.Add(bills.datePrinted, bills.guestName, bills.roomNumber, bills.arrivalDate, bills.depatureDate, bills.numberOfNights, bills.totalCharge, bills.isPrepaidOr60Day, bills.datePaidInAdvance, bills.amountPaid);
+                table.Rows.Add(bills.datePrinted, bills.guestName, bills.roomNumber, bills.arrivalDate, bills.depatureDate, bills.numberOfNights, bills.totalCharge, bills.isPrepaidOr60Day, bills.datePaidInAdvance == DateTime.MinValue ? "" : bills.datePaidInAdvance.ToString(), bills.amountPaid);
 
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = "Accomodation Bill";
+                saveFileDialog.Filter = "Comma Separated Values (.csv)|*.csv";
+                saveFileDialog.Title = "Save Report As";
+                var cancel = saveFileDialog.ShowDialog();
+
+                if(cancel == DialogResult.Cancel || string.IsNullOrWhiteSpace(saveFileDialog.FileName) )
+                {
+                    return;
+                }
+
+                string filePath = saveFileDialog.FileName;
+
+                StringBuilder input = new StringBuilder();
+
+                string[] colNames = table.Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToArray();
+                input.AppendLine(string.Join(",", colNames));
+
+                foreach(DataRow datarow in table.Rows)
+                {
+                    string[] fields = datarow.ItemArray.Select(field => field.ToString()).ToArray();
+                    input.AppendLine(string.Join(",", fields));
+                }
+
+                File.WriteAllText(filePath, input.ToString());
+
+                this.Name = "Successful";
 
                 string guestName = guestNameBox.Text;
                 DateTime initialDateVal = fromDate.Value;
