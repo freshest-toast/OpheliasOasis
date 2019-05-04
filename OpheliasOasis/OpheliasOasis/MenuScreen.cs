@@ -92,6 +92,11 @@ namespace OpheliasOasis
             changeBaseRateForm.ShowDialog();
         }
 
+        private void emailGuestBtn_Click(object sender, EventArgs e)
+        {
+            EmailGuestForm emailGuestForm = new EmailGuestForm();
+            emailGuestForm.ShowDialog();
+        }
         private void ExpectedOccupancyReportBtn_Click(object sender, EventArgs e)
         {
             GenerateExpectedOccupancyReport expectedOccupancyReport = new GenerateExpectedOccupancyReport();
@@ -117,12 +122,7 @@ namespace OpheliasOasis
         private void IncentiveReportBtn_Click(object sender, EventArgs e)
         {
             GenerateIncentiveReport incentiveReport = new GenerateIncentiveReport();
-
-            // If the user saved the file and it was successfully saved, output to the user it was successful
-            if (incentiveReport.Name == "Successful")
-            {
-                incentiveReport.ShowDialog();
-            }
+            incentiveReport.ShowDialog();
         }
 
         private void DailyArrivalsReportBtn_Click(object sender, EventArgs e)
