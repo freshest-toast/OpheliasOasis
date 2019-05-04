@@ -577,7 +577,10 @@ namespace OpheliasOasis
             return returnval;
         }
 
-
+        /// <summary>
+        /// Cancels the reservation. The reservation id is identified with find reservation
+        /// </summary>
+        /// <param name="reservationId">a string containing the reservation id</param>
         public static void cancelReservation(string reservationId)
         {
             int errorCode;
@@ -628,6 +631,8 @@ namespace OpheliasOasis
 
         public static decimal addReservation(DateTime startDate, DateTime endDate, string firstName, string lastName, string emailAddress,string creditCard, out string reservationId)
         {
+            if (endDate < startDate)
+                throw new ArgumentException("The end date needs to be greater than the start date");
             reservationId = "";
             decimal cost;
             //Check username and password for length
@@ -724,6 +729,9 @@ namespace OpheliasOasis
 
         public static decimal changeReservation(string reservationId, DateTime startDate,DateTime endDate,string firstname, string lastname, string email)
         {
+            if (endDate < startDate)
+                throw new ArgumentException("The end date needs to be greater than the start date");
+
             int errorCode;
             decimal cost;
             string errorMessage;
@@ -896,6 +904,10 @@ namespace OpheliasOasis
 
         public static void changeRate(DateTime beginDate,DateTime endDate, decimal newRate)
         {
+            if (endDate < beginDate)
+                throw new ArgumentException("The end date must be greater than the start date");
+            if (newRate <= 0)
+                throw new ArgumentException("The new rate must be greater than 0");
             int errorCode;
             string errorMessage;
             try
@@ -1405,6 +1417,7 @@ namespace OpheliasOasis
                 throw new Exception(errorMessage);
             return returnval;
         }
+
         public static bool makePayment(string reservationId)
         {
             int errorCode;
