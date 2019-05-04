@@ -478,7 +478,7 @@ namespace OpheliasOasis
                         else
                             transaction.Rollback();
                     }
-                    catch(Exception e)
+                    catch
                     {
                         transaction.Rollback();
                         throw;
@@ -706,7 +706,7 @@ namespace OpheliasOasis
                         else
                             transaction.Rollback();
                     }
-                    catch(Exception x)
+                    catch
                     {
                         transaction.Rollback();
                         throw;
@@ -772,7 +772,7 @@ namespace OpheliasOasis
                         else
                             transaction.Rollback();
                     }
-                    catch(Exception e)
+                    catch(Exception x)
                     {
                         transaction.Rollback();
                         throw;
@@ -838,7 +838,7 @@ namespace OpheliasOasis
 
         public static decimal checkOut(string reservationId)
         {
-            reservationId = "";
+            
             decimal cost;
             int errorCode;
             string errorMessage;
@@ -891,7 +891,7 @@ namespace OpheliasOasis
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
-            return 0;
+            return cost;
         }
 
         public static void changeRate(DateTime beginDate,DateTime endDate, decimal newRate)
@@ -1007,7 +1007,7 @@ namespace OpheliasOasis
                         foreach (DataRow x in returnval.Rows)
                             if ((string)x.ItemArray[0] == y.Item1)
                             {
-                                x.ItemArray[1] = y.Item2;
+                                x.SetField(1,y.Item2);
                                 break;
                             }
                 }
@@ -1064,9 +1064,9 @@ namespace OpheliasOasis
                             string date = reader.GetDateTime(0).ToString("MM/dd/yyyy");
                             int dayOccupancy = 0;
                             int var1 = reader.GetInt32(1);
-                            int var2 = reader.GetInt32(1);
-                            int var3 = reader.GetInt32(1);
-                            int var4 = reader.GetInt32(1);
+                            int var2 = reader.GetInt32(2);
+                            int var3 = reader.GetInt32(3);
+                            int var4 = reader.GetInt32(4);
                             dayOccupancy = var1 + var2 + var3 + var4;
                             totalOccupants += dayOccupancy;
                             results.Add(new Tuple<string, int, int, int, int,int>(date, var1, var2, var3, var4,dayOccupancy));
@@ -1081,23 +1081,23 @@ namespace OpheliasOasis
                         foreach (DataRow x in returnval.Rows)
                             if ((string)x.ItemArray[0] == y.Item1)
                             {
-                                x.ItemArray[1] = y.Item2;
-                                x.ItemArray[2] = y.Item3;
-                                x.ItemArray[3] = y.Item4;
-                                x.ItemArray[4] = y.Item5;
-                                x.ItemArray[5] = y.Item6;
+                                x.SetField(1, y.Item2);
+                                x.SetField(2, y.Item3);
+                                x.SetField(3, y.Item4);
+                                x.SetField(4, y.Item5);
+                                x.SetField(5, y.Item6);
                                 break;
                             }
                     
                 }
             }
-            catch(Exception x)
+            catch
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
             if (errorCode != 0)
                 throw new Exception(errorMessage);
-            returnval.Rows.Add("Average Expected Occupancy Rate", (decimal)totalOccupants / (45 * 30), 0, 0, 0, 0, 0);
+            returnval.Rows.Add("Average Expected Occupancy Rate", (decimal)totalOccupants / (45 * 30), 0, 0, 0, 0);
             return returnval;
         }
 
@@ -1107,7 +1107,7 @@ namespace OpheliasOasis
             returnval.Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("Date",typeof(string)),
-                new DataColumn("Incentive Discount",typeof(decimal))
+                new DataColumn("Incentive Discount",typeof(string))
             });
             int errorCode;
             decimal totalIncentiveDiscount = 0;
@@ -1151,13 +1151,12 @@ namespace OpheliasOasis
                         foreach (DataRow x in returnval.Rows)
                             if ((string)x.ItemArray[0] == y.Item1)
                             {
-                                x.ItemArray[1] = y.Item2;
+                                x.SetField(1, y.Item2.ToString());
                                 break;
                             }
-
                 }
             }
-            catch (Exception x)
+            catch
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
@@ -1202,7 +1201,7 @@ namespace OpheliasOasis
                         command.Parameters.Add(errMsgParam);
                         using (SqlDataReader reader = command.ExecuteReader())
                             while (reader.Read())
-                                returnval.Rows.Add(reader.GetString(0),reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
+                                returnval.Rows.Add(reader.GetString(0),reader.GetString(1), reader.GetInt32(2), reader.GetDateTime(3).ToString("MM/dd/yyyy"));
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
                         if (errorCode == 0)
@@ -1232,10 +1231,10 @@ namespace OpheliasOasis
             DataTable returnval = new DataTable("Daily Occupancy Report");
             returnval.Columns.AddRange(new DataColumn[]
             {
+
+                new DataColumn("Room #", typeof(int)),
                 new DataColumn("First Name",typeof(string)),
                 new DataColumn("Last Name", typeof(string)),
-                new DataColumn("Reservation Type", typeof(string)),
-                new DataColumn("Room #", typeof(int)),
                 new DataColumn("Depature Date",typeof(string))
             });
             int errorCode;
@@ -1262,7 +1261,7 @@ namespace OpheliasOasis
                         command.Parameters.Add(errMsgParam);
                         using (SqlDataReader reader = command.ExecuteReader())
                             while (reader.Read())
-                                returnval.Rows.Add(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4).ToString("MM/dd/yyyy"));
+                                returnval.Rows.Add(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetDateTime(3).ToString("MM/dd/yyyy"));
                         errorCode = Convert.ToInt32(errCodeParam.Value);
                         errorMessage = Convert.ToString(errMsgParam.Value);
                         if (errorCode == 0)
@@ -1345,7 +1344,7 @@ namespace OpheliasOasis
                     }
                 }
             }
-            catch (Exception x)
+            catch
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
@@ -1398,7 +1397,7 @@ namespace OpheliasOasis
                     errorMessage = Convert.ToString(errMsgParam.Value);
                 }
             }
-            catch(Exception x)
+            catch
             {
                 throw new Exception("A connection issued occurred. Please contact an administrator");
             }
