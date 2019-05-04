@@ -20,7 +20,11 @@ namespace OpheliasOasis
 
             try
             {
-                //DatabaseManager.loginUser("djones7777", "password1");
+                DatabaseManager.loginUser("djones7777", "password1");
+                string reserveId;
+                var cost = DatabaseManager.addReservation(DateTime.Now, DateTime.Now.AddDays(1), "Jesus", "Harold2", "", "1234567812345678", out reserveId);
+                DatabaseManager.checkIn(reserveId);
+                cost = DatabaseManager.checkOut(reserveId);
                 //string reserveId;
                 //var tbl1 = DatabaseManager.addReservation(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2), "Joe", "Schmoe", "", "1234567812345678", out reserveId);
                 //DatabaseManager.makePayment(reserveId);
@@ -32,7 +36,7 @@ namespace OpheliasOasis
                 //var tbl = DatabaseManager.getDailyOccupancyReport();
                 //DatabaseManager.modifyUser((int)tbl.Rows[0].ItemArray[0], "test", 3, "Tester", "Dusty", 10000);
             }
-            catch (Exception e)
+            catch 
             {
                 return;
             }
