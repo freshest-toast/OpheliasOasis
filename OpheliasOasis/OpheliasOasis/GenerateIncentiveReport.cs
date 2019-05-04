@@ -18,7 +18,7 @@ namespace OpheliasOasis
 
             // open a save dialog box to user, and let user choose where they are saving the document
             SaveFileDialog dialogWindow = new SaveFileDialog();
-            dialogWindow.FileName = "Expected Income Report";
+            dialogWindow.FileName = "Incentive Report";
             dialogWindow.Filter = "Comma Separated Values (.csv)|*.csv";
             dialogWindow.Title = "Save Report As";
             var cancelClick = dialogWindow.ShowDialog();
@@ -67,7 +67,7 @@ namespace OpheliasOasis
             this.output.Name = "output";
             this.output.Size = new System.Drawing.Size(300, 20);
             this.output.TabIndex = 0;
-            this.output.Text = "Income Report Saved Successfully";
+            this.output.Text = "Incentive Report Saved Successfully";
             // 
             // GenerateIncentiveReport
             // 
